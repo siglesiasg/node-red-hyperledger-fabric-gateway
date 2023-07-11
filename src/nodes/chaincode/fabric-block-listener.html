@@ -1,0 +1,112 @@
+<script type="text/javascript">
+    RED.nodes.registerType('fabric-block-listener', {
+        category: 'Hyperledger Gateway',
+        color: '#E6E0F8',
+        paletteLabel: 'block listener',
+        defaults: {
+            name:                   { value: '' },
+            gatewaySelector:        { value: '', required: true, type: 'fabric-gateway'  },
+            identitySelector:       { value: '', required: true, type: 'fabric-identity' },
+            channelSelector:        { value: '', required: true, type: 'fabric-channel'  },
+            sendTransactions:       { value: false, required: true },
+            firstBlock:             { value: '', required: false, validate:RED.validators.number() },
+            checkpointerPath:       { value: '', required: true },
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: 'icon.png',
+        align: 'lect',
+        label: function () {
+            return this.name || 'hlf block listener';
+        },
+
+    });
+</script>
+
+
+<script type="text/html" data-template-name="fabric-block-listener">
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-gatewaySelector"><i class="fa"></i>Gateway</label>
+        <input type="select" id="node-input-gatewaySelector" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-identitySelector"><i class="fa"></i>Identity</label>
+        <input type="select" id="node-input-identitySelector" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-channelSelector"><i class="fa"></i>Channel</label>
+        <input type="select" id="node-input-channelSelector" placeholder="" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-sendTransactions"><i class="fa"></i>Send Transactions</label>
+        <input type="checkbox" id="node-input-sendTransactions" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-firstBlock"><i class="fa"></i>First Block</label>
+        <input type="text" id="node-input-firstBlock" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-checkpointerPath"><i class="fa"></i>Checkpointer Filename</label>
+        <input type="text" id="node-input-checkpointerPath" />
+    </div>
+    
+    <div class="form-tips"><span>Tip: The Checkpointer Filename should be an absolute path, otherwise it will be relative to the working directory of the Node-RED process.</span></div>
+</script>
+
+<script type="text/html" data-help-name="fabric-block-listener">
+    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
+    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
+    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
+    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+</script>
+
+<!-- Commit Node Config -->
+
+<script type="text/javascript">
+    RED.nodes.registerType('fabric-block-listener-commit', {
+        category: 'Hyperledger Gateway',
+        color: '#E6E0F8',
+        paletteLabel: 'block listener commit',
+        defaults: {
+            name:                   { value: '' },
+        },
+        inputs: 1,
+        outputs: 0,
+        icon: 'icon.png',
+        align: 'right',
+        label: function () {
+            return this.name || 'hlf block listener commit';
+        },
+
+    });
+</script>
+
+
+<script type="text/html" data-template-name="fabric-block-listener-commit">
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-tips"><span>The messages sent to this node must originate from an hlf block listener node</span></div>
+
+</script>
+
+<script type="text/html" data-help-name="fabric-block-listener-commit">
+    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
+    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
+    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
+    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+</script>

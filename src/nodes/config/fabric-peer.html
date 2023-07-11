@@ -1,0 +1,76 @@
+<script type="text/javascript">
+
+    RED.nodes.registerType('fabric-peer', {
+        category: 'config',
+        defaults: {
+            name:           {value: '' },
+            url:            {value: 'grcp://testpeer.com', required: true},
+            grpcOptions:    {value: '{\r\n    \"grpc.default_authority\": \"testpeer.com:9999\",\r\n    \"grpc.ssl_target_name_override\": \"testpeer.com\"\r\n}'},
+        },
+
+        label : function () {
+            return this.name?this.name:this.url;
+        },
+
+        oneditprepare: function () {
+            var that = this;
+            this.editor = RED.editor.createEditor({
+                id: 'node-config-input-grpcOptions-editor',
+                mode: 'monaco/mode/json',
+                value: $('#node-config-input-grpcOptions').val()
+            });
+
+            RED.library.create({
+                url: 'functions',      // where to get the data from
+                type: 'function',      // the type of object the library is for
+                editor: that.editor,   // the field name the main text body goes to
+                fields: ['name', 'outputs']
+            });
+
+            this.editor.focus();
+        },
+
+        oneditsave: function () {
+            $('#node-config-input-grpcOptions').val(this.editor.getValue());
+            this.editor.destroy();
+            delete this.editor;
+        },
+
+        oneditcancel: function () {
+            this.editor.destroy();
+            delete this.editor;
+        }        
+
+    });
+</script>
+
+<script type="text/html" data-template-name="fabric-peer">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-url"><i class="fa"></i>Url</label>
+        <input type="text" id="node-config-input-url" placeholder=""/>
+    </div>
+
+    <div class="form-row">
+        <div id="node-config-input-grpcOptions-outer">
+            <div class="form-row" style="margin-bottom: 0px;">
+                <label for="node-config-input-grpcOptions"><i class="fa"></i>grpc Options</label>
+                <input type="hidden" id="node-config-input-grpcOptions" autofocus="autofocus">
+            </div>
+            <div class="form-row node-text-editor-row">
+                <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-config-input-grpcOptions-editor"></div>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="fabric-peer">
+  <p>Hyperledger Fabric peer node. Provides the configuration for the Hyperledger Fabric nodes</p>
+</script>
+
+

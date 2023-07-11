@@ -1,0 +1,16 @@
+{
+    "port": 9999,
+    "endorsing_organizations": [
+        {
+            "name": "nodered-test"
+        }
+    ],
+    "channels": [
+        {
+            "name": "nodered-test",
+            "endorsing_organizations": [
+                "nodered-test"
+            ]
+        }
+    ]
+}

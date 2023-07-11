@@ -1,0 +1,33 @@
+<script type="text/javascript">
+
+    RED.nodes.registerType('fabric-channel', {
+        category : 'config',
+        defaults : {
+            name:         {value: ''},
+            channel:      {value : '', required : true},
+        },
+
+        label : function () {
+            return this.name?this.name:this.channel;
+        },
+    });
+</script>
+
+<script type="text/html" data-template-name="fabric-channel">
+
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-channel"><i class="fa"></i>Channel</label>
+        <input type="text" id="node-config-input-channel" placeholder="channel"/>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="fabric-channel">
+  <p>Hyperledger Fabric channel node. Provides the configuration for the Hyperledger Fabric nodes</p>
+</script>
+
+

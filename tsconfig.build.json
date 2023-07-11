@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "exclude": [
+        ".vscode",
+        "dist",
+        "docker",
+        "local-env",
+        "node_modules",
+        "**/*spec.ts"
+    ]
+}

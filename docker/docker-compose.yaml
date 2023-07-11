@@ -1,0 +1,6 @@
+version: '3'
+services:
+  test-fab:
+    build: ./microfab
+    ports:
+      - 9999:9999

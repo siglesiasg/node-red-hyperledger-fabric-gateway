@@ -1,0 +1,40 @@
+<script type="text/javascript">
+
+    RED.nodes.registerType('fabric-gateway', {
+        category: 'config',
+        defaults: {
+            name:               { value: '', required: true },
+            mspIdSelectorGw:    { value: '', required: true, type: 'fabric-mspid' },
+            //identitySelectorGw: { value: '', required: true, type: 'fabric-identity' },
+            peerSelectorGw:     { value: '', required: true, type: 'fabric-peer' },
+        },
+
+        label: function () {
+            return this.name;
+        },
+
+    });
+</script>
+
+<script type="text/html" data-template-name="fabric-gateway">
+
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-mspIdSelectorGw"><i class="fa"></i>Msp Id</label>
+        <input type="select" id="node-config-input-mspIdSelectorGw" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-peerSelectorGw"><i class="fa"></i>Peer</label>
+        <input type="select" id="node-config-input-peerSelectorGw" />
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="fabric-gateway">
+  <p>Hyperledger Fabric config node. Provides the configuration for the Hyperledger Fabric nodes</p>
+</script>

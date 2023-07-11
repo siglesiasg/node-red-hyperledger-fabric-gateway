@@ -1,0 +1,33 @@
+<script type="text/javascript">
+
+    RED.nodes.registerType('fabric-contract', {
+        category : 'config',
+        defaults : {
+            name:         {value: ''},
+            contract:     {value : '', required : true},
+        },
+
+        label : function () {
+            return this.name?this.name:this.contract;
+        },
+    });
+</script>
+
+<script type="text/html" data-template-name="fabric-contract">
+
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-contract"><i class="fa"></i>Contract</label>
+        <input type="text" id="node-config-input-contract" placeholder="contract"/>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="fabric-contract">
+  <p>Hyperledger Fabric contract node. Provides the configuration for the Hyperledger Fabric nodes</p>
+</script>
+
+

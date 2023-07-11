@@ -1,0 +1,114 @@
+<script type="text/javascript">
+    RED.nodes.registerType('fabric-cc-generic', {
+        category: 'Hyperledger Gateway',
+        color: '#E6E0F8',
+        paletteLabel: 'call cc',
+        defaults: {
+            name:                   { value: '' },
+            gatewaySelector:        { value: '', required: true, type: 'fabric-gateway'  },
+            identitySelector:       { value: '', required: true, type: 'fabric-identity' },
+            channelSelector:        { value: '', required: true, type: 'fabric-channel'  },
+            contractSelector:       { value: '', required: true, type: 'fabric-contract' },
+            actionType:             { value: 'submit', requiered: true },
+            transaction:            { value: '', required: false },
+            args:                   { value: '', required: false },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'icon.png',
+        align: 'lect',
+        label: function () {
+            return this.name || 'hlf call chaincode';
+        },
+
+        oneditprepare : function () {
+            var that = this;
+            this.editor = RED.editor.createEditor({
+                id : 'node-input-args-editor',
+                mode : 'ace/mode/json',
+                value : $('#node-input-args').val()
+            });
+            RED.library.create({
+                url : 'functions', // where to get the data from
+                type : 'function', // the type of object the library is for
+                editor : that.editor, // the field name the main text body goes to
+                fields : ['name', 'outputs']
+            });
+            this.editor.focus();
+        },
+
+        oneditsave : function () {
+            $('#node-input-args').val(this.editor.getValue());
+            this.editor.destroy();
+            delete this.editor;
+        },
+
+        oneditcancel : function () {
+            this.editor.destroy();
+            delete this.editor;
+        }
+
+    });
+</script>
+
+
+<script type="text/html" data-template-name="fabric-cc-generic">
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-gatewaySelector"><i class="fa"></i>Gateway</label>
+        <input type="select" id="node-input-gatewaySelector" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-identitySelector"><i class="fa"></i>Identity</label>
+        <input type="select" id="node-input-identitySelector" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-channelSelector"><i class="fa"></i>Channel</label>
+        <input type="select" id="node-input-channelSelector" placeholder="" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-contractSelector"><i class="fa"></i>Contract</label>
+        <input type="select" id="node-input-contractSelector" placeholder="" />
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-actionType"><i class="fa"></i>Action Type</label>
+        <select id="node-input-actionType">
+            <option value="submit">Submit Transaction</option>
+            <option value="evaluate">Evaluate Transaction</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-transaction"><i class="fa"></i>Transaction</label>
+        <input type="text" id="node-input-transaction" placeholder="queryAllCars" />
+    </div>
+
+    <div class="form-row">
+        <div id="node-input-args-outer">
+            <div class="form-row" style="margin-bottom: 0px;">
+                <label for="node-input-args"><i class="fa"></i>Args Array</label>
+                <input type="hidden" id="node-input-args" autofocus="autofocus">
+            </div>
+            <div class="form-row node-text-editor-row">
+                <div style="height: 100px; min-height:80px;" class="node-text-editor" id="node-input-args-editor"></div>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="fabric-cc-generic">
+    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
+    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
+    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
+    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+</script>

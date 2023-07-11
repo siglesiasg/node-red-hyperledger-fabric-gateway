@@ -1,0 +1,198 @@
+<script type="text/javascript">
+
+    RED.nodes.registerType('fabric-identity', {
+        category: 'config',
+        defaults: {
+            name:           {value: '' },                   // Display Name
+            mspIdSelector:  {value: '', required: true, type: 'fabric-mspid'},
+            certType:       {value: 'embeded', required: true},
+            // embeded
+            cert:           {value: '', required: false},
+            privateKey:     {value: '', required: false},
+            ca:             {value: '', required: true},
+
+            // file
+            certPath:       {value: '', required: false},
+            privateKeyPath: {value: '', required: false},
+            
+            // microfab
+            microfabUrl:    {value: 'http://client.127-0-0-1.nip.io:9999', required: false},
+            microfabId:     {value: '', required: false},
+        },
+
+        label : function () {
+            return this.name?this.name:this.identityId;
+        },
+        oneditprepare: function() {
+
+            $("#node-config-input-certType").on("change", function() {
+                $(".form-row-tip-openIdentityFileError").hide();
+                $("#node-config-input-file").val(''); 
+            }),
+
+            $("#node-config-input-cert").on("change", function() {
+                $(".form-row-tip-openIdentityFileError").hide();
+                $("#node-config-input-file").val('');
+            }),
+
+            $("#node-config-input-privateKey").on("change", function() {
+                $(".form-row-tip-openIdentityFileError").hide();
+                $("#node-config-input-file").val('');
+            }),
+
+            $("#node-config-input-ca").on("change", function() {
+                $(".form-row-tip-openIdentityFileError").hide();
+                $("#node-config-input-file").val(''); 
+            }),
+
+            $("#node-config-input-certType").on("change", function() {
+                
+                // Embeded
+                $(".form-row-cert").hide(); $("#node-config-input-cert").prop('required', false);
+                $(".form-row-privateKey").hide(); $("#node-config-input-privateKey").prop('required', false);
+
+                // Files
+                $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
+                $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
+                $(".form-row-openIdentityFile").hide();
+                $(".form-row-tip-openIdentityFile").hide();
+                $(".form-row-tip-openIdentityFileError").hide();
+                $(".form-row-tip-openIdentityFile").hide();
+
+                // Microfab
+                $(".form-row-microfabUrl").hide(); $("#node-config-input-microfabUrl").prop('required', false);
+                $(".form-row-microfabId").hide(); $("#node-config-input-microfabId").prop('required', false);
+
+                if ($(this).val() === "embeded") {
+                    $(".form-row-cert").show(); $("#node-config-input-cert").prop('required', true);
+                    $(".form-row-privateKey").show(); $("#node-config-input-privateKey").prop('required', true);
+                    $(".form-row-openIdentityFile").show();
+                    $(".form-row-tip-openIdentityFile").show();
+                } else if ($(this).val() === "files") {
+                    $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
+                    $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
+                } else {
+                    $(".form-row-microfabUrl").show(); $("#node-config-input-microfabUrl").prop('required', true);
+                    $(".form-row-microfabId").show(); $("#node-config-input-microfabId").prop('required', true);
+                }
+
+            }).change();
+
+            $("#node-config-input-file").on("change", function(event) {
+                $(".form-row-tip-openIdentityFileError").hide();
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        
+                        var jsonData = JSON.parse(e.target.result);
+                        if (jsonData.hasOwnProperty('name')) {
+                            $("#node-config-input-name").val(jsonData.name);
+                        } else {
+                            throw new Error("Invalid JSON file. Missing 'name' property.");
+                        }
+                        if (jsonData.hasOwnProperty('cert')) {
+                            $("#node-config-input-cert").val(jsonData.cert);
+                        } else {
+                            throw new Error("Invalid JSON file. Missing 'cert' property.");
+                        }
+                        if (jsonData.hasOwnProperty('private_key')) {
+                            $("#node-config-input-privateKey").val(jsonData.private_key);
+                        } else {
+                            throw new Error("Invalid JSON file. Missing 'privateKey' property.");
+                        }
+                        if (jsonData.hasOwnProperty('ca')) {
+                            $("#node-config-input-ca").val(jsonData.ca);
+                        } else {
+                            throw new Error("Invalid JSON file. Missing 'ca' property.");
+                        }
+
+                    } catch (error) {
+                        $(".form-row-tip-openIdentityFileError").show();
+                        $(".form-row-tip-openIdentityFileError").text(error);
+                        $("#node-config-input-file").val('');
+                        console.error("Error parsing JSON file:", error);
+                    }
+                };
+                reader.readAsText(file);
+            });       
+            
+        },        
+    });
+</script>
+
+<script type="text/html" data-template-name="fabric-identity">
+
+    <div class="form-row">
+        <label for="node-config-input-certType"><i class="fa fa-tasks"></i><span> Cert Type</span></label>
+        <select type="select" id="node-config-input-certType" style="width:70%;">
+            <option value="embeded">Embeded</option>
+            <option value="files">Filesystem</option>
+            <option value="microfab">Microfab</option>
+        </select>
+    </div>   
+
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-mspIdSelector"><i class="fa"></i>Msp Id</label>
+        <input type="text" id="node-config-input-mspIdSelector" placeholder=""/>
+    </div>
+
+    <!-- Embeded -->
+    <div class="form-row form-row-cert hide">
+        <label for="node-config-input-cert"><i class="fa"></i>Cert</label>
+        <input type="text" id="node-config-input-cert" placeholder="LS0tLS1..."/>
+    </div>
+
+    <div class="form-row form-row-privateKey hide">
+        <label for="node-config-input-privateKey"><i class="fa"></i>Private Key</label>
+        <input type="text" id="node-config-input-privateKey" placeholder="LS0tLS1..."/>
+    </div>
+
+    <div class="form-row form-row-ca">
+        <label for="node-config-input-ca"><i class="fa"></i>Ca</label>
+        <input type="text" id="node-config-input-ca" placeholder="LS0tLS1..."/>
+    </div>
+    
+    <!-- File -->
+    <div class="form-row form-row-certPath hide">
+        <label for="node-config-input-certPath"><i class="fa"></i>Cert Path</label>
+        <input type="text" id="node-config-input-certPath" placeholder=""/>
+    </div>
+
+    <div class="form-row form-row-privateKeyPath hide">
+        <label for="node-config-input-privateKeyPath"><i class="fa"></i>Private Key Path</label>
+        <input type="text" id="node-config-input-privateKeyPath" placeholder=""/>
+    </div>
+
+    <div class="form-tips form-row-tip-openIdentityFile hide"><span>Tip: Open a Fabric Operations Console identity file to autofill form</span></div>
+    
+    <div class="form-row form-row-openIdentityFile hide">
+        <label for="node-config-input-file"><i class="fa"></i>Identity File</label>
+        <input type="file" id="node-config-input-file" accept=".json">
+    </div>
+    
+    <div class="form-tips form-row-tip-openIdentityFileError hide"><span>Error loading file</span></div>
+
+    <!-- Microfab -->
+    <div class="form-row form-row-microfabUrl hide">
+        <label for="node-config-input-microfabUrl"><i class="fa"></i>Microfab Url</label>
+        <input type="text" id="node-config-input-microfabUrl" placeholder=""/>
+    </div>
+
+    <div class="form-row form-row-microfabId hide">
+        <label for="node-config-input-microfabId"><i class="fa"></i>Id</label>
+        <input type="text" id="node-config-input-microfabId" placeholder=""/>
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="fabric-identity">
+  <p>Hyperledger Fabric identity node. Provides the configuration for the Hyperledger Fabric nodes</p>
+</script>
+
+

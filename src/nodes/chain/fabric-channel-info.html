@@ -1,0 +1,53 @@
+<script type="text/javascript">
+    RED.nodes.registerType('fabric-channel-info', {
+        category: 'Hyperledger Gateway',
+        color: '#E6E0F8',
+        paletteLabel: 'channel info',
+        defaults: {
+            name:                   { value: '' },
+            gatewaySelector:        { value: '', required: true, type: 'fabric-gateway'  },
+            identitySelector:       { value: '', required: true, type: 'fabric-identity' },
+            channelSelector:        { value: '', required: true, type: 'fabric-channel'  },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'icon.png',
+        align: 'lect',
+        label: function () {
+            return this.name || 'hlf get channel info';
+        },
+
+    });
+</script>
+
+
+<script type="text/html" data-template-name="fabric-channel-info">
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-gatewaySelector"><i class="fa"></i>Gateway</label>
+        <input type="select" id="node-input-gatewaySelector" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-identitySelector"><i class="fa"></i>Identity</label>
+        <input type="select" id="node-input-identitySelector" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-channelSelector"><i class="fa"></i>Channel</label>
+        <input type="select" id="node-input-channelSelector" placeholder="" />
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="fabric-channel-info">
+    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
+    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
+    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
+    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+</script>

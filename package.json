@@ -1,0 +1,68 @@
+{
+    "name": "@siglesiasg/node-red-hyperledger-fabric-gateway",
+    "version": "1.0.0",
+    "description": "Hyperledger Fabric 2.x nodes for node-red with latest fabric-gateway library",
+    "author": "Secundino Iglesias",
+    "engines": {
+        "node": ">=18.12.1"
+    },
+    "scripts": {
+        "start:debug": "npm run clean && tsc-watch --onSuccess \"npm run start\"",
+        "start": "npm run cpy-res && node --inspect node_modules/node-red/red.js -u ./local-env --safe",
+        "clean": "rimraf dist",
+        "build": "npm run clean && npm run cpy-res && tsc",
+        "cpy-res": "npm run cpy-res-config && npm run cpy-res-chain && npm run cpy-res-chaincode",
+        "cpy-res-config": "cpy ./src/nodes/config/*.html ./dist/nodes/config",
+        "cpy-res-chain": "cpy ./src/nodes/chain/*.html ./dist/nodes/chain && cpy ./src/nodes/chain/icons/* ./dist/nodes/chain/icons/",
+        "cpy-res-chaincode": "cpy ./src/nodes/chaincode/*.html ./dist/nodes/chaincode && cpy ./src/nodes/chaincode/icons/* ./dist/nodes/chaincode/icons/"
+    },
+    "dependencies": {
+        "@hyperledger/fabric-gateway": "^1.3.0",
+        "@hyperledger/fabric-protos": "^0.2.0",
+        "await-semaphore": "^0.1.3"
+    },
+    "devDependencies": {
+        "@types/node": "^18.16.18",
+        "@types/node-red": "^1.3.1",
+        "@siglesiasg/node-red-hyperledger-fabric-gateway": "file:./",
+        "@node-red-contrib-themes/theme-collection": "^3.0.6",
+        "cpy-cli": "^4.2.0",
+        "eslint": "^8.43.0",
+        "mkdirp": "^3.0.1",
+        "node-red": "^3.0.2",
+        "rimraf": "^5.0.1",
+        "ts-node": "^10.9.1",
+        "tsc-watch": "^6.0.4",
+        "typescript": "^5.1.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/--/node-red-contrib-hyperledger-fabric-2-nodes"
+    },
+    "keywords": [
+        "node-red",
+        "fabric",
+        "blockchain",
+        "hyperledger",
+        "gateway",
+        "fabric-gateway",
+        "solutions"
+    ],
+    "node-red": {
+        "nodes": {
+            "fabric-channel": "./dist/nodes/config/fabric-channel.js",
+            "fabric-contract": "./dist/nodes/config/fabric-contract.js",
+            "fabric-mspid": "./dist/nodes/config/fabric-mspid.js",
+            "fabric-identity": "./dist/nodes/config/fabric-identity.js",
+            "fabric-gateway": "./dist/nodes/config/fabric-gateway.js",
+            "fabric-peer": "./dist/nodes/config/fabric-peer.js",
+            "fabric-metadata": "./dist/nodes/chaincode/fabric-metadata.js",
+            "fabric-block-listener": "./dist/nodes/chaincode/fabric-block-listener.js",
+            "fabric-cc-generic": "./dist/nodes/chaincode/fabric-cc-generic.js",
+            "fabric-cc-evaluate": "./dist/nodes/chaincode/fabric-cc-evaluate.js",
+            "fabric-cc-submit": "./dist/nodes/chaincode/fabric-cc-submit.js",
+            "fabric-block-info": "./dist/nodes/chain/fabric-block-info.js",
+            "fabric-channel-info": "./dist/nodes/chain/fabric-channel-info.js"
+        }
+    }
+}
