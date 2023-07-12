@@ -6,7 +6,3 @@ export interface FabricBlockListenerDef extends ConnectionNodeDef {
     firstBlock: number;
     checkpointerPath: string;
 }
-
-export interface FabricBlockListenerCommitDef extends ConnectionNodeDef {
-    name: string;
-}

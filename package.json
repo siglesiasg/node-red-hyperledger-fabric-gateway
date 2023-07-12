@@ -58,6 +58,7 @@
             "fabric-peer": "./dist/nodes/config/fabric-peer.js",
             "fabric-metadata": "./dist/nodes/chaincode/fabric-metadata.js",
             "fabric-block-listener": "./dist/nodes/chaincode/fabric-block-listener.js",
+            "fabric-block-listener-commit": "./dist/nodes/chaincode/fabric-block-listener-commit.js",
             "fabric-cc-generic": "./dist/nodes/chaincode/fabric-cc-generic.js",
             "fabric-cc-evaluate": "./dist/nodes/chaincode/fabric-cc-evaluate.js",
             "fabric-cc-submit": "./dist/nodes/chaincode/fabric-cc-submit.js",
