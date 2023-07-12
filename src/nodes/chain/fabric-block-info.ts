@@ -10,13 +10,11 @@ export = (RED: NodeAPI): void => {
 
     RED.nodes.registerType('fabric-block-info', fabricGetBlockNode);    
 
-    let connection: ConnectionConfigModel;
-
     function fabricGetBlockNode(this: Node<FabricBlockInfoDef>, config: FabricBlockInfoDef) {
         
         RED.nodes.createNode(this, config); // First line always!
 
-        connection = buildConnectionConfig(RED, config);
+        const connection = buildConnectionConfig(RED, config);
         const fabricChannelDef = getConfigValidate(RED, config.channelSelector);
 
         this.debug('Fabric Get Block By Number Node Created');

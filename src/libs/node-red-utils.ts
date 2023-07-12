@@ -1,12 +1,37 @@
 import { Node, NodeAPI, NodeDef, NodeMessageInFlow } from "node-red";
 
+export function addSharedData(node: Node, key: string, sharedData: any) {
+    const nodeAny = node as any;
+    if (!nodeAny.sharedData) {
+        nodeAny.sharedData = {};
+    }
+    node.debug(`Updating shared data of ${node.name?node.name:'nodeId[' + node.id + ']'}`);
+
+    nodeAny.sharedData[key] = sharedData;
+}
+
+export function getSharedData(RED: NodeAPI, nodeId: string, key: string) {
+    const nodeAny = RED.nodes.getNode(nodeId) as any;
+
+    if (!nodeAny) {
+        return undefined;
+    }
+
+    if (nodeAny.sharedData[key]) {
+        return nodeAny.sharedData[key];
+    } else {
+        return undefined;
+    }
+
+};
+
 export function addConfiguration(node: Node, config: NodeDef) {
     const nodeAny = node as any;
     if (!nodeAny.internalConfig) {
         nodeAny.internalConfig = {};
     }
     nodeAny.internalConfig = config;
-    node.debug(`Updating data of ${node.name?node.name:'nodeId[' + node.id + ']'} with ${JSON.stringify(nodeAny.internalConfig)}`);
+    node.debug(`Updating data of ${node.name?node.name:'nodeId[' + node.id + ']'}`);
 };
 
 export function getConfig(node: Node) {
@@ -18,16 +43,16 @@ export function getConfig(node: Node) {
     }
 };
 
-export function getConfigValidate(RED: NodeAPI, id: string) {
-    const nodeAny = RED.nodes.getNode(id) as any;
+export function getConfigValidate(RED: NodeAPI, nodeId: string) {
+    const nodeAny = RED.nodes.getNode(nodeId) as any;
     if (!nodeAny) {
-        throw new Error("Unable to get config node with id: " + id + ". Is this node enabled and available?");
+        throw new Error("Unable to get config node with id: " + nodeId + ". Is this node enabled and available?");
     }
     
     if (nodeAny.internalConfig) {
         return nodeAny.internalConfig;
     } else {
-        throw new Error("Unable to get internal config node with id: " + id + ". Is this node filled with internal config info?");
+        throw new Error("Unable to get internal config node with id: " + nodeId + ". Is this node filled with internal config info?");
     }
 };
 

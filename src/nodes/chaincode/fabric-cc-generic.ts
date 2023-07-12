@@ -14,13 +14,11 @@ export = (RED: NodeAPI): void => {
 
     const utf8Decoder = new TextDecoder();
 
-    let connection: ConnectionConfigModel;
-
     function fabricGenericNode(this: Node<FabricGenericDef>, config: FabricGenericDef) {
         
         RED.nodes.createNode(this, config); // First line always!
 
-        connection = buildConnectionConfig(RED, config);
+        const connection = buildConnectionConfig(RED, config);
 
         this.debug('Fabric Generic Node Created');
         this.status({ fill: 'green', shape: 'dot', text: "Ready" });

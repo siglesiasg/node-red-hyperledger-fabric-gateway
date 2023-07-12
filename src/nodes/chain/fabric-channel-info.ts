@@ -10,13 +10,11 @@ export = (RED: NodeAPI): void => {
 
     RED.nodes.registerType('fabric-channel-info', fabricChannelInfoNode);
 
-    let connection: ConnectionConfigModel;
-
     function fabricChannelInfoNode(this: Node<FabricChannelInfoDef>, config: FabricChannelInfoDef) {
         
         RED.nodes.createNode(this, config); // First line always!
 
-        connection = buildConnectionConfig(RED, config);
+        const connection = buildConnectionConfig(RED, config);
         const fabricChannelDef = getConfigValidate(RED, config.channelSelector);
 
         this.debug('Fabric Get Chain Info Node Created');

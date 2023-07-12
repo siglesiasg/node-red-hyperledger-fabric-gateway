@@ -12,13 +12,11 @@ export = (RED: NodeAPI): void => {
 
     const utf8Decoder = new TextDecoder();
 
-    let connection: ConnectionConfigModel;    
-
     function fabricMetadataNode(this: Node<FabricMetadataDef>, config: FabricMetadataDef) {
         
         RED.nodes.createNode(this, config); // First line always!
 
-        connection = buildConnectionConfig(RED, config);
+        const connection = buildConnectionConfig(RED, config);
 
         this.debug('Fabric Metadata Node Created: ' + config.id);
         this.status({ fill: 'green', shape: 'dot', text: "Ready" });
