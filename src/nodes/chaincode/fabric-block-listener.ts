@@ -1,6 +1,6 @@
+import Semaphore from '@chriscdn/promise-semaphore';
 import { CloseableAsyncIterable, EventsOptions, checkpointers } from "@hyperledger/fabric-gateway";
 import { Block } from "@hyperledger/fabric-protos/lib/common";
-import { Semaphore } from 'await-semaphore';
 import { Node, NodeAPI, NodeMessageInFlow } from "node-red";
 import { getGateway } from "../../libs/fabric-connection-pool";
 import { addConfiguration, addEventToPayload, addSharedData, getConfigValidate, getSharedData } from "../../libs/node-red-utils";
@@ -57,8 +57,6 @@ export = (RED: NodeAPI): void => {
                 
                 const checkpointer = await checkpointers.file(config.checkpointerPath);
                 addSharedData(node, 'checkpointer', checkpointer);
-                const locks: Map<string, any> = new Map();
-                addSharedData(node, 'locks', locks);
 
                 const eventsOption: EventsOptions = {
                     checkpoint: checkpointer,
@@ -73,8 +71,11 @@ export = (RED: NodeAPI): void => {
                 const request = network.newBlockEventsRequest(eventsOption);
                 const blockIterable = await request.getEvents();
 
+                const semaphore = new Semaphore();
+
                 addSharedData(node, 'blockIterable', blockIterable);
-                
+                addSharedData(node, 'semaphore', semaphore);
+
                 let nextBlock;
                 if (eventsOption.checkpoint) {
                     nextBlock = eventsOption.checkpoint.getBlockNumber();
@@ -85,7 +86,7 @@ export = (RED: NodeAPI): void => {
                 node.status({ fill: 'green', shape: 'dot', text: "Waiting for next block: " + nextBlock });
     
                 if (!config.sendTransactions) {
-                    await sendByBlocks(node, fabricChannelDef.channel);
+                    await sendByBlocks(node, fabricChannelDef.channel, semaphore);
                 } else {
                     let checkpointBlock: number
                     let checkpointTx: number;
@@ -96,7 +97,7 @@ export = (RED: NodeAPI): void => {
                         checkpointBlock = Number(eventsOption.startBlock);
                         checkpointTx = 0;
                     }
-                    await sendByTransactions(node, checkpointBlock, checkpointTx, fabricChannelDef.channel); 
+                    await sendByTransactions(node, checkpointBlock, checkpointTx, fabricChannelDef.channel, semaphore); 
                 }
                 
             } catch (error: any) {
@@ -112,33 +113,36 @@ export = (RED: NodeAPI): void => {
             }            
         }
     
-        async function sendByBlocks(node: Node<FabricBlockListenerDef>, channel: string) {
+        async function sendByBlocks(node: Node<FabricBlockListenerDef>, channel: string, semaphore: Semaphore) {
 
             const blockIterable = getSharedData(RED, node.id, 'blockIterable') as CloseableAsyncIterable<Block>;
 
             try {
-                const semaphore = new Semaphore(1);
+
                 if (!blockIterable) { throw new Error('Unable to get block iterable'); }
+
                 for await (const block of blockIterable) {
     
                     const blockData = buildBlockEventModel(block, channel);
-    
-                    node.status({ fill: 'yellow', shape: 'dot', text: "Previous block (" + blockData.blockNumber + ") is still pending to be commited" });
                     
                     const lockId = `${node.id}-${blockData.blockNumber}`;
-                    await getLock(semaphore, node.id, lockId);
-    
+                    console.log("Adding lock " + lockId);
+                    await semaphore.acquire();
+                    console.log("Added lock " + lockId);
+                    
+                    node.status({ fill: 'yellow', shape: 'dot', text: "Previous block (" + blockData.blockNumber + ") is still pending to be commited" });
+                    
                     const msg: NodeMessageInFlow = {
                         _msgid: RED.util.generateId(),
                         topic: ""
                     };
-    
+                    
                     addEventToPayload(RED, msg, JSON.stringify(blockData));
-    
+                    
                     RED.util.setMessageProperty(msg, "_lockSession", lockId, true);
-    
+                    
                     node.send(msg);
-    
+                    
                     node.status({ fill: 'green', shape: 'dot', text: "Waiting for next block: " + (blockData.blockNumber + 1) });
                 }
             } catch (error: any) {
@@ -156,28 +160,31 @@ export = (RED: NodeAPI): void => {
             }   
         }
     
-        async function sendByTransactions(node: Node<FabricBlockListenerDef>, checkpointBlock: number, checkpointTx: number, channel: string) {
+        async function sendByTransactions(node: Node<FabricBlockListenerDef>, checkpointBlock: number, checkpointTx: number, channel: string, semaphore: Semaphore) {
             
             const blockIterable = getSharedData(RED, node.id, 'blockIterable') as CloseableAsyncIterable<Block>;
 
             try {
-                const semaphore = new Semaphore(1);
+
                 if (!blockIterable) { throw new Error('Unable to get block iterable'); }
                 for await (const block of blockIterable) {
     
                     const blockData = buildBlockEventModel(block, channel);
     
-                    for (const tx of blockData.transactions) {
+                    for await (const tx of blockData.transactions) {
     
                         if (blockData.blockNumber === checkpointBlock && tx.transactionIndex <= checkpointTx) {
+                            node.debug(`Skiping already processed block ${blockData.blockNumber} - ${tx.transactionIndex}`);
                             continue;
                         }
                         
+                        const lockId = `${node.id}-${blockData.blockNumber}-${tx.transactionIndex}`;
+                        console.log("Adding lock " + lockId);
+                        await semaphore.acquire();
+                        console.log("Added lock " + lockId);
+                        
                         node.status({ fill: 'yellow', shape: 'dot', text: "Previous block (" + blockData.blockNumber + " - " + tx.transactionIndex + ") is still pending to be commited" });
 
-                        const lockId = `${node.id}-${blockData.blockNumber}-${tx.transactionIndex}`;
-                        await getLock(semaphore, node.id, lockId);
-        
                         const msg: NodeMessageInFlow = {
                             _msgid: RED.util.generateId(),
                             topic: ""
@@ -188,7 +195,6 @@ export = (RED: NodeAPI): void => {
                         RED.util.setMessageProperty(msg, "_lockSession", lockId, true);
         
                         node.send(msg);
-        
                     }
 
                     node.status({ fill: 'green', shape: 'dot', text: "Waiting for next block: " + (blockData.blockNumber + 1) });
@@ -207,14 +213,6 @@ export = (RED: NodeAPI): void => {
                 }
             }       
         }        
-    }
-    
-    async function getLock(semaphore: Semaphore, nodeId: string, id: string) {
-        console.log("Adding lock " + id);
-        const blockLock = await semaphore.acquire();
-        console.log("Added lock " + id);
-        const locks = getSharedData(RED, nodeId, 'locks');
-        locks.set(id, blockLock);
     }
     
 }

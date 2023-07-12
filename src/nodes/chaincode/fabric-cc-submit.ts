@@ -43,7 +43,7 @@ export = (RED: NodeAPI): void => {
 
                 addResultToPayload(RED, msg, transactionName, transactionArgs, decodedResult);
 
-                this.debug('Fabric Node Executed Generic');
+                // this.debug('Fabric Node Executed Generic');
 
                 this.status({ fill: 'green', shape: 'dot', text: "Done" });
 

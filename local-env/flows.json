@@ -57,7 +57,6 @@
         "id": "6e8b76b1d125d156",
         "type": "fabric-block-listener",
         "z": "6c6e63a00c517697",
-        "d": true,
         "name": "",
         "gatewaySelector": "351176dfd3b410a7",
         "identitySelector": "4c5c4259b27b7979",
@@ -68,7 +67,12 @@
         "x": 120,
         "y": 480,
         "wires": [
-            []
+            [
+                "b1e8a613eaf9f54e",
+                "4f7463d7aa133df3",
+                "48a9a04bbfd14739",
+                "49e07fc08a0eb269"
+            ]
         ]
     },
     {
@@ -98,7 +102,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 330,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "49e07fc08a0eb269"
@@ -123,10 +127,10 @@
         "allowrate": false,
         "outputs": 1,
         "x": 330,
-        "y": 560,
+        "y": 620,
         "wires": [
             [
-                "49e07fc08a0eb269"
+                "26d8e3a82dcc4220"
             ]
         ]
     },
@@ -158,18 +162,7 @@
                 "d487177454017313",
                 "dff29e2564453d83",
                 "20a2c66d54f16e3d",
-                "0795798652624904",
-                "648624d2e688a72e",
-                "0c46ed7558f50a96",
-                "f947a0fb3867ef1c",
-                "b7e8d5984f4ba04e",
-                "8bfc25a5bd59447e",
-                "e442f3f6d8ac1daa",
-                "ca1c01e718670dcf",
-                "ebc6a1a89b73f9c1",
-                "ff60246bd9c6f045",
-                "4fed1baefc1414b7",
-                "1ad869cd75eec21e"
+                "0795798652624904"
             ]
         ]
     },
@@ -321,13 +314,13 @@
         "firstBlock": "0",
         "checkpointerPath": "./local-env/test-config/checkpointer-tx.ser",
         "x": 120,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
-                "aa14e906f3bb4221",
                 "47ee8363bf885a89",
-                "3e40397cda4815cd",
-                "4f7463d7aa133df3"
+                "aa14e906f3bb4221",
+                "4f7463d7aa133df3",
+                "26d8e3a82dcc4220"
             ]
         ]
     },
@@ -673,10 +666,10 @@
         "allowrate": false,
         "outputs": 1,
         "x": 340,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
-                "49e07fc08a0eb269"
+                "26d8e3a82dcc4220"
             ]
         ]
     },
@@ -698,10 +691,10 @@
         "allowrate": false,
         "outputs": 1,
         "x": 340,
-        "y": 680,
+        "y": 700,
         "wires": [
             [
-                "49e07fc08a0eb269"
+                "26d8e3a82dcc4220"
             ]
         ]
     },
@@ -729,6 +722,55 @@
         "wires": [
             [
                 "aee187ea32a2f54f"
+            ]
+        ]
+    },
+    {
+        "id": "26d8e3a82dcc4220",
+        "type": "fabric-block-listener-commit",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "x": 590,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "7a838ee205893b44",
+        "type": "catch",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 720,
+        "y": 320,
+        "wires": [
+            [
+                "4f7463d7aa133df3"
+            ]
+        ]
+    },
+    {
+        "id": "48a9a04bbfd14739",
+        "type": "delay",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "500",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 330,
+        "y": 540,
+        "wires": [
+            [
+                "49e07fc08a0eb269"
             ]
         ]
     }

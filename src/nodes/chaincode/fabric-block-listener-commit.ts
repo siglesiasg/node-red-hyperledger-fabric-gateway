@@ -1,3 +1,4 @@
+import Semaphore from '@chriscdn/promise-semaphore';
 import { Node, NodeAPI, NodeMessageInFlow } from "node-red";
 import { getSharedData } from "../../libs/node-red-utils";
 import { FabricBlockListenerCommitDef } from "./fabric-block-listener-commit.def";
@@ -23,12 +24,18 @@ export = (RED: NodeAPI): void => {
                 if (!nodeId || nodeId.length !==2 && nodeId.length !==3) { throw new Error('Unable to get node id from lockSession: ' + _lockSession); }
                 
                 const listenerNodeId = nodeId[0];
-                const checkpointedBlock = BigInt(parseInt(nodeId[1]));
-                const checkPointerTxIndex = (nodeId.length === 3) ? nodeId[2] : undefined;
+                const currentBlock = BigInt(parseInt(nodeId[1]));
+                const withTx = nodeId.length === 3;
+                const currentTx = (nodeId.length === 3) ? Number(nodeId[2]) : undefined;
 
-                await releaseLock(listenerNodeId, _lockSession);
-
-                await updateCheckpointer.call(this, listenerNodeId, checkpointedBlock, checkPointerTxIndex);
+                const isDupplicated = await updateCheckpointer.call(this, listenerNodeId, withTx, currentBlock, currentTx);
+                
+                if (!isDupplicated) {
+                    const semaphore = getSharedData(RED, listenerNodeId, 'semaphore') as Semaphore;
+                    console.log("Releasing lock " + _lockSession);
+                    semaphore.release();
+                    console.log("Released lock " + _lockSession);
+                }
 
                 done();
 
@@ -40,53 +47,37 @@ export = (RED: NodeAPI): void => {
 
         });        
         
-        async function updateCheckpointer(this: Node<FabricBlockListenerCommitDef>, listenerNodeId: string, checkpointedBlock: bigint, checkPointerTxIndex: string) {
-           
-            const checkpointer = getSharedData(RED, listenerNodeId, 'checkpointer');
-            const currentBlock = checkpointer.getBlockNumber();
-            const currentTxIndex = Number(checkpointer.getTransactionId());
+        async function updateCheckpointer(this: Node<FabricBlockListenerCommitDef>, listenerNodeId: string, withTx: boolean, currentBlock: bigint, currentTx: number): Promise<boolean> {
 
-            // If checkpointer is not initialized just start it
-            if (!currentBlock) {
-                if (!checkPointerTxIndex) {
-                    await checkpointer.checkpointBlock(checkpointedBlock);
-                    this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${checkpointedBlock} for node ${this.name?this.name:this.id}`});
+            const checkpointer = getSharedData(RED, listenerNodeId, 'checkpointer');
+
+            if (!checkpointer) {    // If there is no checkpointer -> create one
+                if (!withTx) {
+                    await checkpointer.checkpointBlock(currentBlock);
+                    this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} for node ${listenerNodeId}`});
                 } else {
-                    await checkpointer.checkpointTransaction(checkpointedBlock, checkPointerTxIndex);
-                    this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${checkpointedBlock} - ${checkPointerTxIndex} for node ${this.name?this.name:this.id}`});
+                    await checkpointer.checkpointTransaction(currentBlock, String(currentTx));
+                    this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} - ${currentTx} for node ${listenerNodeId}`});
                 }
             } else {
-                // Checkpoint can only grow: Numbers and transaction. This aims to be duplicate message proof
-                if (currentBlock <= checkpointedBlock) {
-                    if (!checkPointerTxIndex) {
-                        await checkpointer.checkpointBlock(checkpointedBlock);
-                        this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${checkpointedBlock} for node ${this.name?this.name:this.id}`});
+                if (!withTx) {
+                    if (currentBlock >= checkpointer.getBlockNumber()) {
+                        await checkpointer.checkpointBlock(currentBlock);
+                        this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} for node ${listenerNodeId}`});
                     } else {
-                        if (currentBlock < checkpointedBlock || (currentBlock === checkpointedBlock && currentTxIndex < Number(checkPointerTxIndex))) {
-                            await checkpointer.checkpointTransaction(checkpointedBlock, String(Number(checkPointerTxIndex)+1));
-                            this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${checkpointedBlock} - ${checkPointerTxIndex} for node ${this.name?this.name:this.id}`});
-                        }
+                        return true;
+                    }
+                } else {
+                    if (currentBlock > checkpointer.getBlockNumber() || (currentBlock === checkpointer.getBlockNumber() && currentTx >= Number(checkpointer.getTransactionId()))) {
+                        await checkpointer.checkpointTransaction(currentBlock, String(currentTx+1));
+                        this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} - ${currentTx} for node ${listenerNodeId}`});
+                    } else {
+                        return true;
                     }
                 }
             }
+
+            return false;
         }
     }        
-
-    async function releaseLock(nodeId: string, id: string) {
-        const locks = getSharedData(RED, nodeId, 'locks');
-        const release = locks.get(id);
-        if (release) {
-            try {
-                console.log("Release lock " + id);
-                await release();
-                console.log("Released lock " + id);
-            } catch (err) {
-                console.log("Unable to Release lock " + id);
-                // Nothing to do if unable to unlock
-            }
-            locks.delete(id);
-        } else {
-            console.log("Lock already released " + id);
-        }
-    }
 }

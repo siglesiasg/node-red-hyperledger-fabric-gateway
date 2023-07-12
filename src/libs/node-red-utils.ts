@@ -5,7 +5,7 @@ export function addSharedData(node: Node, key: string, sharedData: any) {
     if (!nodeAny.sharedData) {
         nodeAny.sharedData = {};
     }
-    node.debug(`Updating shared data of ${node.name?node.name:'nodeId[' + node.id + ']'}`);
+    node.debug(`Updating shared data of ${node.name?node.name:'nodeId[' + node.id + ']'} - Key: ${key}`);
 
     nodeAny.sharedData[key] = sharedData;
 }

@@ -17,15 +17,15 @@
         "cpy-res-chaincode": "cpy ./src/nodes/chaincode/*.html ./dist/nodes/chaincode && cpy ./src/nodes/chaincode/icons/* ./dist/nodes/chaincode/icons/"
     },
     "dependencies": {
+        "@chriscdn/promise-semaphore": "^2.0.1",
         "@hyperledger/fabric-gateway": "^1.3.0",
-        "@hyperledger/fabric-protos": "^0.2.0",
-        "await-semaphore": "^0.1.3"
+        "@hyperledger/fabric-protos": "^0.2.0"
     },
     "devDependencies": {
+        "@node-red-contrib-themes/theme-collection": "^3.0.6",
+        "@siglesiasg/node-red-hyperledger-fabric-gateway": "file:./",
         "@types/node": "^18.16.18",
         "@types/node-red": "^1.3.1",
-        "@siglesiasg/node-red-hyperledger-fabric-gateway": "file:./",
-        "@node-red-contrib-themes/theme-collection": "^3.0.6",
         "cpy-cli": "^4.2.0",
         "eslint": "^8.43.0",
         "mkdirp": "^3.0.1",
