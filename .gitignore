@@ -6,3 +6,8 @@ local-env/package.json
 local-env/.config.users.json
 local-env/.config.nodes.json
 docker/microfab/connection-profile.json
+*.backup
+local-env/.config.runtime.json
+*.ser
+*.pem
+*.key

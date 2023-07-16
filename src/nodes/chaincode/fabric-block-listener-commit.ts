@@ -32,15 +32,15 @@ export = (RED: NodeAPI): void => {
                 
                 if (!isDupplicated) {
                     const semaphore = getSharedData(RED, listenerNodeId, 'semaphore') as Semaphore;
-                    console.log("Releasing lock " + _lockSession);
+                    this.debug(`Releasing lock ${_lockSession} of node ${listenerNodeId}`);
                     semaphore.release();
-                    console.log("Released lock " + _lockSession);
+                } else {
+                    this.trace(`Lock ${_lockSession} of node ${listenerNodeId} got duplicated`);
                 }
 
                 done();
 
             } catch (error: any) {
-                this.error(error.stack);
                 this.status({ fill: 'red', shape: 'dot', text: error });
                 done(error);
             }
@@ -51,29 +51,19 @@ export = (RED: NodeAPI): void => {
 
             const checkpointer = getSharedData(RED, listenerNodeId, 'checkpointer');
 
-            if (!checkpointer) {    // If there is no checkpointer -> create one
-                if (!withTx) {
+            if (!withTx) {
+                if (currentBlock >= checkpointer.getBlockNumber()) {
                     await checkpointer.checkpointBlock(currentBlock);
                     this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} for node ${listenerNodeId}`});
                 } else {
-                    await checkpointer.checkpointTransaction(currentBlock, String(currentTx));
-                    this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} - ${currentTx} for node ${listenerNodeId}`});
+                    return true;
                 }
             } else {
-                if (!withTx) {
-                    if (currentBlock >= checkpointer.getBlockNumber()) {
-                        await checkpointer.checkpointBlock(currentBlock);
-                        this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} for node ${listenerNodeId}`});
-                    } else {
-                        return true;
-                    }
+                if (currentBlock > checkpointer.getBlockNumber() || (currentBlock === checkpointer.getBlockNumber() && currentTx >= Number(checkpointer.getTransactionId()))) {
+                    await checkpointer.checkpointTransaction(currentBlock, String(currentTx+1));
+                    this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} - ${currentTx} for node ${listenerNodeId}`});
                 } else {
-                    if (currentBlock > checkpointer.getBlockNumber() || (currentBlock === checkpointer.getBlockNumber() && currentTx >= Number(checkpointer.getTransactionId()))) {
-                        await checkpointer.checkpointTransaction(currentBlock, String(currentTx+1));
-                        this.status({ fill: 'green', shape: 'dot', text: `Checkpointed block: ${currentBlock} - ${currentTx} for node ${listenerNodeId}`});
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
             }
 

@@ -45,7 +45,6 @@ export = (RED: NodeAPI): void => {
                 done();
 
             } catch (error: any) {
-                this.error(error.stack);
                 this.status({ fill: 'red', shape: 'dot', text: error });
                 done(error);
             }

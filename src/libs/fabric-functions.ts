@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
-import { connect, ConnectOptions, Gateway, GrpcClient, Identity, Signer, signers } from '@hyperledger/fabric-gateway';
+import { connect, ConnectOptions, Gateway, GrpcClient, Identity, ProposalOptions, Signer, signers } from '@hyperledger/fabric-gateway';
 import { Buffer } from 'buffer';
 import * as crypto from 'crypto';
 import { FabricIdentityDef } from './../nodes/config/fabric-identity.def';
@@ -92,25 +92,52 @@ export function getTransactionName(configTransaction: string, payload: { transac
     return transactionName;
 }
 
-export function getTransactionArgs(configArgs: string, payload: { transactionArgs?: string; }): string[] {
-    let transactionArgs;
-    if (payload && payload.transactionArgs) {
-        transactionArgs = payload.transactionArgs;
-    } else if (configArgs) {
-        try {
-            transactionArgs = JSON.parse(configArgs);
-        } catch (e) {
-            throw new Error("Configuration Args is not an array! " + configArgs);
-        }
-    } else {
-        return [];
-    }
-    
-    if (transactionArgs && !Array.isArray(transactionArgs)) {
-        throw new Error("Transaction Args is not an array");
-    }
+export function getTransactionData(configArgs: string, configTransient: string, payload: { transaction?: { args?: string[], transient?: string[] }}): ProposalOptions {
 
-    return transactionArgs;
+    return {
+        arguments: getTransactionArg(),
+        transientData: getTransactionTransient()
+    };    
+
+    function getTransactionArg() {
+        let transactionArgs;
+        if (payload?.transaction?.args) {
+            transactionArgs = payload.transaction.args;
+
+        } else if (configArgs) {
+            try {
+                transactionArgs = JSON.parse(configArgs);
+            } catch (e) {
+                throw new Error("Configuration Args is not an array!");
+            }
+
+        }
+
+        if (transactionArgs && !Array.isArray(transactionArgs)) {
+            throw new Error("Configuration Args is not an array!");
+        }
+
+        return transactionArgs;
+    }    
+
+    function getTransactionTransient() {
+        let transientData;
+        if (payload?.transaction?.transient) {
+            transientData = payload.transaction.transient;
+        } else if (configTransient) {
+            try {
+                transientData = JSON.parse(configTransient);
+            } catch (e) {
+                throw new Error("Transient args is not an array! " + configTransient);
+            }
+        }
+
+        if (transientData && !Array.isArray(transientData)) {
+            throw new Error("Transient args is not an array");
+        }
+        
+        return transientData;
+    }
 }
 
 /**
@@ -134,7 +161,6 @@ export async function closeConnection(this: Node<{}>, connection: ConnectionConf
         done();
 
     } catch (error: any) {
-        this.error(error.stack);
         this.status({ fill: 'red', shape: 'dot', text: error });
         done();
     }

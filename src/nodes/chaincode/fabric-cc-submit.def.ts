@@ -5,4 +5,5 @@ export interface FabricCCSubmitDef extends ConnectionNodeDef {
     contractSelector: string;
     transaction: string;
     args: string;
+    transientData: string;
 }

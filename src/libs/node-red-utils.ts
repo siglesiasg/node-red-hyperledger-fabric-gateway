@@ -1,3 +1,4 @@
+import { Proposal, ProposalOptions } from "@hyperledger/fabric-gateway";
 import { Node, NodeAPI, NodeDef, NodeMessageInFlow } from "node-red";
 
 export function addSharedData(node: Node, key: string, sharedData: any) {
@@ -64,14 +65,30 @@ export function addEventToPayload(RED: NodeAPI, msg: NodeMessageInFlow, decodedR
     RED.util.setMessageProperty(msg, "payload", data, true);
 }
 
-export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, transactionName: string, transactionArgs: string[], decodedResult: string) {
-    const data = {
+export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, transactionName: string, transactionArgs: string[] | ProposalOptions, decodedResult: string) {
+
+    let data;
+    if (!transactionArgs) {
+        data = undefined;
+    } else if (Array.isArray(transactionArgs)) {
+        data = {
+            args: transactionArgs
+        };
+    } else {
+        data = {
+            args: (transactionArgs as ProposalOptions).arguments,
+            transient: (transactionArgs as ProposalOptions).transientData,
+        };        
+    }
+
+    const payloadData = {
         query: {
             transactionName,
-            transactionArgs
+            transaction: data
         },
         result: decodedResult?JSON.parse(decodedResult):undefined
-    };
+    };    
 
-    RED.util.setMessageProperty(msg, "payload", data, true);
+
+    RED.util.setMessageProperty(msg, "payload", payloadData, true);
 }

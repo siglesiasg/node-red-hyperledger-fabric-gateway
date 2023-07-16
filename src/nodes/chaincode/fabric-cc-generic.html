@@ -2,7 +2,7 @@
     RED.nodes.registerType('fabric-cc-generic', {
         category: 'Hyperledger Gateway',
         color: '#E6E0F8',
-        paletteLabel: 'call cc',
+        paletteLabel: 'cc call',
         defaults: {
             name:                   { value: '' },
             gatewaySelector:        { value: '', required: true, type: 'fabric-gateway'  },
@@ -11,12 +11,16 @@
             contractSelector:       { value: '', required: true, type: 'fabric-contract' },
             actionType:             { value: 'submit', requiered: true },
             transaction:            { value: '', required: false },
-            args:                   { value: '', required: false },
+            args:                   { value: '', required: false, validate: function(args, opt) {
+                if (!args) { return true; }
+                if (Array.isArray(JSON.parse(args))) { return true; }
+                return 'Args must be an array of strings';
+            }},
         },
         inputs: 1,
         outputs: 1,
         icon: 'icon.png',
-        align: 'lect',
+        align: 'left',
         label: function () {
             return this.name || 'hlf call chaincode';
         },
@@ -25,7 +29,7 @@
             var that = this;
             this.editor = RED.editor.createEditor({
                 id : 'node-input-args-editor',
-                mode : 'ace/mode/json',
+                mode : 'application/json',
                 value : $('#node-input-args').val()
             });
             RED.library.create({

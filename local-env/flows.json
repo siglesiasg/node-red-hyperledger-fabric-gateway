@@ -57,79 +57,17 @@
         "id": "6e8b76b1d125d156",
         "type": "fabric-block-listener",
         "z": "6c6e63a00c517697",
-        "name": "",
+        "name": "Block Listener",
         "gatewaySelector": "351176dfd3b410a7",
         "identitySelector": "4c5c4259b27b7979",
         "channelSelector": "95a7c9887a800091",
-        "sendTransactions": false,
-        "firstBlock": "0",
-        "checkpointerPath": "./local-env/test-config/checkpointer.ser",
-        "x": 120,
-        "y": 480,
+        "sendTransactions": "false",
+        "checkpointerPath": "./local-env/test-config/checkpointer1.ser",
+        "x": 110,
+        "y": 400,
         "wires": [
             [
-                "b1e8a613eaf9f54e",
-                "4f7463d7aa133df3",
-                "48a9a04bbfd14739",
-                "49e07fc08a0eb269"
-            ]
-        ]
-    },
-    {
-        "id": "49e07fc08a0eb269",
-        "type": "fabric-block-listener-commit",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "x": 590,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "b1e8a613eaf9f54e",
-        "type": "delay",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "50",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 330,
-        "y": 500,
-        "wires": [
-            [
-                "49e07fc08a0eb269"
-            ]
-        ]
-    },
-    {
-        "id": "aa14e906f3bb4221",
-        "type": "delay",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "200",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 330,
-        "y": 620,
-        "wires": [
-            [
+                "b50bff98d7b19767",
                 "26d8e3a82dcc4220"
             ]
         ]
@@ -156,13 +94,10 @@
         "payload": "{\"transactionArgs\": []}",
         "payloadType": "json",
         "x": 120,
-        "y": 60,
+        "y": 160,
         "wires": [
             [
-                "d487177454017313",
-                "dff29e2564453d83",
-                "20a2c66d54f16e3d",
-                "0795798652624904"
+                "d487177454017313"
             ]
         ]
     },
@@ -177,10 +112,13 @@
         "contractSelector": "5f1b46cce5ffeabb",
         "transaction": "CreateCar",
         "args": "",
+        "transientData": "[\"test\"]",
         "x": 470,
-        "y": 60,
+        "y": 160,
         "wires": [
-            []
+            [
+                "4f7463d7aa133df3"
+            ]
         ]
     },
     {
@@ -196,8 +134,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 680,
-        "y": 140,
+        "x": 700,
+        "y": 160,
         "wires": []
     },
     {
@@ -212,10 +150,10 @@
         "transaction": "QueryAllCars",
         "args": "",
         "x": 480,
-        "y": 400,
+        "y": 260,
         "wires": [
             [
-                "4f7463d7aa133df3"
+                "1aa3acbcccc9f71a"
             ]
         ]
     },
@@ -241,7 +179,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 120,
-        "y": 400,
+        "y": 260,
         "wires": [
             [
                 "a800c7f70cdc2c4b"
@@ -256,112 +194,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "payload.transactionArgs",
+                "p": "payload.transaction.args",
                 "pt": "msg",
                 "to": "[\"0001HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 60,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "dff29e2564453d83",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0002HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0002HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 80,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "adcd7d91b29959df",
-        "type": "fabric-block-listener",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "gatewaySelector": "351176dfd3b410a7",
-        "identitySelector": "4c5c4259b27b7979",
-        "channelSelector": "95a7c9887a800091",
-        "sendTransactions": true,
-        "firstBlock": "0",
-        "checkpointerPath": "./local-env/test-config/checkpointer-tx.ser",
-        "x": 120,
-        "y": 600,
-        "wires": [
-            [
-                "47ee8363bf885a89",
-                "aa14e906f3bb4221",
-                "4f7463d7aa133df3",
-                "26d8e3a82dcc4220"
-            ]
-        ]
-    },
-    {
-        "id": "20a2c66d54f16e3d",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0003HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0003HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 100,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "0795798652624904",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0004HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0004HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
                 "tot": "json"
             }
         ],
@@ -379,16 +214,16 @@
         ]
     },
     {
-        "id": "648624d2e688a72e",
+        "id": "dff29e2564453d83",
         "type": "change",
         "z": "6c6e63a00c517697",
-        "name": "0005HRH",
+        "name": "0002HRH",
         "rules": [
             {
                 "t": "set",
-                "p": "payload.transactionArgs",
+                "p": "payload.transaction.args",
                 "pt": "msg",
-                "to": "[\"0005HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
+                "to": "[\"0002HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
                 "tot": "json"
             }
         ],
@@ -406,16 +241,35 @@
         ]
     },
     {
-        "id": "0c46ed7558f50a96",
+        "id": "adcd7d91b29959df",
+        "type": "fabric-block-listener",
+        "z": "6c6e63a00c517697",
+        "name": "Tx Listener",
+        "gatewaySelector": "351176dfd3b410a7",
+        "identitySelector": "4c5c4259b27b7979",
+        "channelSelector": "95a7c9887a800091",
+        "sendTransactions": "true",
+        "checkpointerPath": "./local-env/test-config/checkpointer-tx1.ser",
+        "x": 100,
+        "y": 520,
+        "wires": [
+            [
+                "26d8e3a82dcc4220",
+                "9a819be0e7c1d60a"
+            ]
+        ]
+    },
+    {
+        "id": "20a2c66d54f16e3d",
         "type": "change",
         "z": "6c6e63a00c517697",
-        "name": "0006HRH",
+        "name": "0003HRH",
         "rules": [
             {
                 "t": "set",
-                "p": "payload.transactionArgs",
+                "p": "payload.transaction.args",
                 "pt": "msg",
-                "to": "[\"0006HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
+                "to": "[\"0003HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
                 "tot": "json"
             }
         ],
@@ -433,16 +287,16 @@
         ]
     },
     {
-        "id": "f947a0fb3867ef1c",
+        "id": "0795798652624904",
         "type": "change",
         "z": "6c6e63a00c517697",
-        "name": "0007HRH",
+        "name": "0004HRH",
         "rules": [
             {
                 "t": "set",
-                "p": "payload.transactionArgs",
+                "p": "payload.transaction.args",
                 "pt": "msg",
-                "to": "[\"0007HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
+                "to": "[\"0004HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
                 "tot": "json"
             }
         ],
@@ -460,16 +314,16 @@
         ]
     },
     {
-        "id": "b7e8d5984f4ba04e",
+        "id": "648624d2e688a72e",
         "type": "change",
         "z": "6c6e63a00c517697",
-        "name": "0008HRH",
+        "name": "0005HRH",
         "rules": [
             {
                 "t": "set",
-                "p": "payload.transactionArgs",
+                "p": "payload.transaction.args",
                 "pt": "msg",
-                "to": "[\"0008HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
+                "to": "[\"0005HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
                 "tot": "json"
             }
         ],
@@ -487,251 +341,12 @@
         ]
     },
     {
-        "id": "8bfc25a5bd59447e",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0009HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0009HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 220,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "e442f3f6d8ac1daa",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0010HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0010HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 240,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "ca1c01e718670dcf",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0011HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"00011HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 260,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "ebc6a1a89b73f9c1",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0012HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0012HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 280,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "ff60246bd9c6f045",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0013HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0013HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 300,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "4fed1baefc1414b7",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0014HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0014HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 320,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "47ee8363bf885a89",
-        "type": "delay",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "1000",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 340,
-        "y": 660,
-        "wires": [
-            [
-                "26d8e3a82dcc4220"
-            ]
-        ]
-    },
-    {
-        "id": "3e40397cda4815cd",
-        "type": "delay",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "2000",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 340,
-        "y": 700,
-        "wires": [
-            [
-                "26d8e3a82dcc4220"
-            ]
-        ]
-    },
-    {
-        "id": "1ad869cd75eec21e",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0015HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transactionArgs",
-                "pt": "msg",
-                "to": "[\"0015HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 340,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
         "id": "26d8e3a82dcc4220",
         "type": "fabric-block-listener-commit",
         "z": "6c6e63a00c517697",
         "name": "",
-        "x": 590,
-        "y": 600,
+        "x": 510,
+        "y": 460,
         "wires": []
     },
     {
@@ -741,37 +356,270 @@
         "name": "",
         "scope": null,
         "uncaught": false,
-        "x": 720,
-        "y": 320,
+        "x": 100,
+        "y": 60,
         "wires": [
             [
-                "4f7463d7aa133df3"
+                "71dc0dbe6384a169"
             ]
         ]
     },
     {
-        "id": "48a9a04bbfd14739",
-        "type": "delay",
+        "id": "4f8cd8ba32a6e2b8",
+        "type": "fabric-channel-info",
         "z": "6c6e63a00c517697",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "500",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 330,
-        "y": 540,
+        "name": "Get Channel Info",
+        "gatewaySelector": "351176dfd3b410a7",
+        "identitySelector": "4c5c4259b27b7979",
+        "channelSelector": "95a7c9887a800091",
+        "x": 490,
+        "y": 320,
         "wires": [
             [
-                "49e07fc08a0eb269"
+                "7e279e342ca57abf"
             ]
         ]
+    },
+    {
+        "id": "1aa3acbcccc9f71a",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "71dc0dbe6384a169",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "91cc936434aa0392",
+        "type": "inject",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 320,
+        "wires": [
+            [
+                "4f8cd8ba32a6e2b8"
+            ]
+        ]
+    },
+    {
+        "id": "7e279e342ca57abf",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload.result.chainInfo.height",
+        "statusType": "msg",
+        "x": 700,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "b50bff98d7b19767",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "9a819be0e7c1d60a",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "ef570186216b3207",
+        "type": "fabric-metadata",
+        "z": "6c6e63a00c517697",
+        "name": "Chaincode Metadata",
+        "gatewaySelector": "351176dfd3b410a7",
+        "identitySelector": "4c5c4259b27b7979",
+        "channelSelector": "95a7c9887a800091",
+        "x": 500,
+        "y": 580,
+        "wires": [
+            [
+                "2c4853aacdbdef13"
+            ]
+        ]
+    },
+    {
+        "id": "2c4853aacdbdef13",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "5f5a059249271359",
+        "type": "inject",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 580,
+        "wires": [
+            [
+                "ef570186216b3207"
+            ]
+        ]
+    },
+    {
+        "id": "2ec94290e2c7ec7c",
+        "type": "fabric-block-info",
+        "z": "6c6e63a00c517697",
+        "name": "Get Block By Number",
+        "method": "number",
+        "gatewaySelector": "351176dfd3b410a7",
+        "identitySelector": "4c5c4259b27b7979",
+        "channelSelector": "95a7c9887a800091",
+        "blockNumber": "3",
+        "blockHash": "",
+        "txId": "",
+        "x": 500,
+        "y": 660,
+        "wires": [
+            [
+                "863543ac8b5745df"
+            ]
+        ]
+    },
+    {
+        "id": "097b8282bc982e17",
+        "type": "inject",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 660,
+        "wires": [
+            [
+                "2ec94290e2c7ec7c"
+            ]
+        ]
+    },
+    {
+        "id": "863543ac8b5745df",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 660,
+        "wires": []
     }
 ]

@@ -1,6 +1,6 @@
 import { Node, NodeAPI, NodeMessageInFlow } from "node-red";
 import { getGateway } from "../../libs/fabric-connection-pool";
-import { getTransactionArgs, getTransactionName } from "../../libs/fabric-functions";
+import { getTransactionName } from "../../libs/fabric-functions";
 import { addResultToPayload, getConfigValidate } from "../../libs/node-red-utils";
 import { closeConnection } from "../../libs/fabric-functions";
 import { ConnectionConfigModel, buildConnectionConfig } from "../../models/connection-config.model";
@@ -36,19 +36,19 @@ export = (RED: NodeAPI): void => {
                 const contract = network.getContract(fabricContractDef.contract);
         
                 const transactionName = getTransactionName(config.transaction, msg.payload);
-                const transactionArgs = getTransactionArgs(config.args, msg.payload);
+                // const transactionArgs = getTransactionArgs(config.args, msg.payload);
 
                 let getResult; 
-                if (config.actionType === 'submit') {
-                    getResult = await contract.submitTransaction(transactionName, ...transactionArgs);
-                } else if (config.actionType === 'evaluate') {
-                    getResult = await contract.evaluateTransaction(transactionName, ...transactionArgs);
-                } else {
-                    throw new Error("Undefined action type: " + config.actionType);
-                }
+                // if (config.actionType === 'submit') {
+                //     getResult = await contract.submit(transactionName, ...transactionArgs);
+                // } else if (config.actionType === 'evaluate') {
+                //     getResult = await contract.evaluate(transactionName, ...transactionArgs);
+                // } else {
+                //     throw new Error("Undefined action type: " + config.actionType);
+                // }
                 const decodedResult = utf8Decoder.decode(getResult);
 
-                addResultToPayload(RED, msg, transactionName, transactionArgs, decodedResult);
+                // addResultToPayload(RED, msg, transactionName, transactionArgs, decodedResult);
 
                 this.debug('Fabric Node Executed Generic');
 
@@ -58,7 +58,6 @@ export = (RED: NodeAPI): void => {
                 done();
 
             } catch (error: any) {
-                this.error(error.stack);
                 this.status({ fill: 'red', shape: 'dot', text: error });
                 done(error);
             }

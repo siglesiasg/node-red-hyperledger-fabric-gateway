@@ -8,14 +8,13 @@
             gatewaySelector:        { value: '', required: true, type: 'fabric-gateway'  },
             identitySelector:       { value: '', required: true, type: 'fabric-identity' },
             channelSelector:        { value: '', required: true, type: 'fabric-channel'  },
-            sendTransactions:       { value: false, required: true },
-            firstBlock:             { value: '', required: false, validate:RED.validators.number() },
+            sendTransactions:       { value: "false", required: true },
             checkpointerPath:       { value: '', required: true },
         },
         inputs: 0,
         outputs: 1,
         icon: 'icon.png',
-        align: 'lect',
+        align: 'left',
         label: function () {
             return this.name || 'hlf block listener';
         },
@@ -48,12 +47,10 @@
 
     <div class="form-row">
         <label for="node-input-sendTransactions"><i class="fa"></i>Send Transactions</label>
-        <input type="checkbox" id="node-input-sendTransactions" />
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-firstBlock"><i class="fa"></i>First Block</label>
-        <input type="text" id="node-input-firstBlock" />
+        <select id="node-input-sendTransactions" style="width: 70%;">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
     </div>
 
     <div class="form-row">

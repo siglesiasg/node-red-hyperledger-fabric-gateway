@@ -1,6 +1,6 @@
 import { Node, NodeAPI, NodeMessageInFlow } from "node-red";
 import { getGateway } from "../../libs/fabric-connection-pool";
-import { getTransactionArgs, getTransactionName } from "../../libs/fabric-functions";
+import { getTransactionName } from "../../libs/fabric-functions";
 import { addResultToPayload, getConfigValidate } from "../../libs/node-red-utils";
 import { FabricChannelDef } from "../config/fabric-channel.def";
 import { FabricContractDef } from "../config/fabric-contract.def";
@@ -36,12 +36,12 @@ export = (RED: NodeAPI): void => {
                 const contract = network.getContract(fabricContractDef.contract);
         
                 const transactionName = getTransactionName(config.transaction, msg.payload);
-                const transactionArgs = getTransactionArgs(config.args, msg.payload);
+                // const transactionArgs = getTransactionArgs(config.args, msg.payload);
 
-                const getResult = await contract.evaluateTransaction(transactionName, ...transactionArgs);
-                const decodedResult = utf8Decoder.decode(getResult);
+                // const getResult = await contract.evaluate(transactionName, ...transactionArgs);
+                // const decodedResult = utf8Decoder.decode(getResult);
 
-                addResultToPayload(RED, msg, transactionName, transactionArgs, decodedResult);
+                // addResultToPayload(RED, msg, transactionName, transactionArgs, decodedResult);
 
                 this.debug('Fabric Node Executed Generic');
 
@@ -51,7 +51,6 @@ export = (RED: NodeAPI): void => {
                 done();
 
             } catch (error: any) {
-                this.error(error.stack);
                 this.status({ fill: 'red', shape: 'dot', text: error });
                 done(error);
             }
