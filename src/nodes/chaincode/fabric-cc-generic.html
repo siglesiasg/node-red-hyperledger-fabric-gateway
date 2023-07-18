@@ -16,6 +16,12 @@
                 if (Array.isArray(JSON.parse(args))) { return true; }
                 return 'Args must be an array of strings';
             }},
+            transientData:          { value: '', required: false, validate: function(args, opt) {
+                console.log('checking: ' + args)
+                if (!args) { return true; }
+                if (Array.isArray(JSON.parse(args))) { return true; }
+                return 'Args must be an array of strings';
+            }},
         },
         inputs: 1,
         outputs: 1,
@@ -39,17 +45,37 @@
                 fields : ['name', 'outputs']
             });
             this.editor.focus();
+
+            this.editorTransient = RED.editor.createEditor({
+                id : 'node-input-transientData-editor',
+                mode : 'application/json',
+                value : $('#node-input-transientData').val()
+            });
+            RED.library.create({
+                url : 'functions', // where to get the data from
+                type : 'function', // the type of object the library is for
+                editor : that.editorTransient, // the field name the main text body goes to
+                fields : ['name', 'outputs']
+            });
+            this.editor.focus();
         },
 
         oneditsave : function () {
             $('#node-input-args').val(this.editor.getValue());
             this.editor.destroy();
             delete this.editor;
+
+            $('#node-input-transientData').val(this.editorTransient.getValue());
+            this.editorTransient.destroy();
+            delete this.editorTransient;
         },
 
         oneditcancel : function () {
             this.editor.destroy();
             delete this.editor;
+
+            this.editorTransient.destroy();
+            delete this.editorTransient;
         }
 
     });
@@ -107,6 +133,18 @@
             </div>
         </div>
     </div>
+
+    <div class="form-row">
+        <div id="node-input-transientData-outer">
+            <div class="form-row" style="margin-bottom: 0px;">
+                <label for="node-input-transientData"><i class="fa"></i>Transient Data Array</label>
+                <input type="hidden" id="node-input-transientData" autofocus="autofocus">
+            </div>
+            <div class="form-row node-text-editor-row">
+                <div style="height: 100px; min-height:80px;" class="node-text-editor" id="node-input-transientData-editor"></div>
+            </div>
+        </div>
+    </div>    
 
 </script>
 

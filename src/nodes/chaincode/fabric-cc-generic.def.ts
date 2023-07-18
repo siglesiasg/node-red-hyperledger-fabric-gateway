@@ -1,9 +1,5 @@
-import { ConnectionNodeDef } from "../connection-config-node.def";
+import { ChaincodeNodeDef } from "../chaincode-config-node.def";
 
-export interface FabricGenericDef extends ConnectionNodeDef {
-    name: string;
-    contractSelector: string;
+export interface FabricGenericDef extends ChaincodeNodeDef {
     actionType: string;
-    transaction: string;
-    args: string;
 }

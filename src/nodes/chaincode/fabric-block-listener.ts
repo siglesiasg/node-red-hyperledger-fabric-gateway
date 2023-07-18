@@ -91,7 +91,6 @@ export = (RED: NodeAPI): void => {
                 
             } catch (error: any) {
     
-                node.error(error.stack);
                 node.status({ fill: 'red', shape: 'dot', text: error });
     
             } finally {
@@ -154,7 +153,6 @@ export = (RED: NodeAPI): void => {
                     if (error.message && error.message.includes('1 CANCELLED: Cancelled on client')) {
                         node.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
                     } else {
-                        node.error(error.stack);
                         node.status({ fill: 'red', shape: 'dot', text: error });
                     }
         
@@ -210,7 +208,6 @@ export = (RED: NodeAPI): void => {
                     if (error.message && error.message.includes('1 CANCELLED: Cancelled on client')) {
                         node.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
                     } else {
-                        node.error(error.stack);
                         node.status({ fill: 'red', shape: 'dot', text: error });
                     }
         

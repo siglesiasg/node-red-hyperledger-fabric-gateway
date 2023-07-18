@@ -1,7 +1,5 @@
 import { BlockchainInfo } from "@hyperledger/fabric-protos/lib/common";
 
-const utf8Decoder = new TextDecoder();
-
 export class ChannelInfoModel {
     height: number;
     lastBlockHash: string;

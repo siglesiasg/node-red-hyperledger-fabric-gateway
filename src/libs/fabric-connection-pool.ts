@@ -1,6 +1,6 @@
 import { Gateway, GrpcClient } from "@hyperledger/fabric-gateway";
 import { Node } from "node-red";
-import { ConnectionConfigModel, IdentityConfigModel, } from "src/models/connection-config.model";
+import { ConnectionConfigModel } from "src/models/connection-config.model";
 import { buildGatewayConnection, newGrpcConnection } from "./fabric-functions";
 
 const connectionMap = new Map<string, GrpcClient> ();

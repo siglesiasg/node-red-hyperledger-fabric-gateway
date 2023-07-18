@@ -2,13 +2,14 @@ import * as grpc from '@grpc/grpc-js';
 import { connect, ConnectOptions, Gateway, GrpcClient, Identity, ProposalOptions, Signer, signers } from '@hyperledger/fabric-gateway';
 import { Buffer } from 'buffer';
 import * as crypto from 'crypto';
-import { FabricIdentityDef } from './../nodes/config/fabric-identity.def';
-import { FabricMspIdDef } from './../nodes/config/fabric-mspid.def';
-import { FabricPeerDef } from './../nodes/config/fabric-peer.def';
-import { ConnectionConfigModel, IdentityConfigModel } from 'src/models/connection-config.model';
-import { Node } from 'node-red';
-import { closeGateway } from './fabric-connection-pool';
 import { promises as fs } from 'fs';
+import { Node, NodeAPI, NodeMessageInFlow } from 'node-red';
+import { ConnectionConfigModel } from 'src/models/connection-config.model';
+import { ChaincodeNodeDef } from 'src/nodes/chaincode-config-node.def';
+import { FabricChannelDef } from 'src/nodes/config/fabric-channel.def';
+import { closeGateway, getGateway } from './fabric-connection-pool';
+import { FabricDecoderType } from './fabric-decoder';
+import { addResultToPayload, getConfigValidate } from './node-red-utils';
 
 export async function newGrpcConnection(connectionConfig: ConnectionConfigModel): Promise<GrpcClient> {
 
@@ -38,14 +39,18 @@ export async function newIdentity(connectionConfig: ConnectionConfigModel): Prom
 
     } else if (connectionConfig.identity.certType === 'microfab') {
 
-        const dataufab = await fetch(connectionConfig.identity.microfabUrl + '/ak/api/v1/components');
-        const bodyJson = await dataufab.json();
-        const ufabIdentity = findCertById(bodyJson, connectionConfig.identity.microfabId);
-
-        credentials = Buffer.from(Buffer.from(ufabIdentity.cert, 'base64').toString('utf8'), 'utf8');
-        
-        const privateKeyPem = Buffer.from(ufabIdentity.private_key, 'base64').toString('utf8');
-        privateKey = crypto.createPrivateKey(privateKeyPem);
+        try {
+            const dataufab = await fetch(connectionConfig.identity.microfabUrl + '/ak/api/v1/components');
+            const bodyJson = await dataufab.json();
+            const ufabIdentity = findCertById(bodyJson, connectionConfig.identity.microfabId);
+    
+            credentials = Buffer.from(Buffer.from(ufabIdentity.cert, 'base64').toString('utf8'), 'utf8');
+            
+            const privateKeyPem = Buffer.from(ufabIdentity.private_key, 'base64').toString('utf8');
+            privateKey = crypto.createPrivateKey(privateKeyPem);
+        } catch (err) {
+            throw new Error(`Unable to build identity from microfab. ${err}`);
+        } 
 
     } else {
         throw new Error('Unable to get identity with cert type: ' + connectionConfig.identity.certType + ". Not implemented");
@@ -92,7 +97,97 @@ export function getTransactionName(configTransaction: string, payload: { transac
     return transactionName;
 }
 
-export function getTransactionData(configArgs: string, configTransient: string, payload: { transaction?: { args?: string[], transient?: string[] }}): ProposalOptions {
+/**
+ * Return the value if it is defined; otherwise thrown an error.
+ * @param value A value that might not be defined.
+ * @param message Error message if the value is not defined.
+ */
+export function assertDefined<T>(value: T | null | undefined, message: string): T {
+    if (value == undefined) {
+        throw new Error(message);
+    }
+
+    return value;
+}
+
+export async function closeConnection(this: Node<{}>, connection: ConnectionConfigModel, done: () => void) {
+    try {
+        await closeGateway(this, connection);
+        this.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
+        this.debug('Closed');
+        done();
+
+    } catch (error: any) {
+        this.status({ fill: 'red', shape: 'dot', text: error });
+        done();
+    }
+}
+
+export async function invokeChaincode(
+    RED: NodeAPI,
+    node: Node<{}>,
+    msg: NodeMessageInFlow,
+    decoder: FabricDecoderType,
+    actionType: string,
+    connection: ConnectionConfigModel,
+    config: ChaincodeNodeDef,
+) {
+    const channelName = getConfigValidate(RED, config.channelSelector).channel;
+    const contractName = getConfigValidate(RED, config.contractSelector).contract;
+
+    const transactionName = getTransactionName(config.transaction, msg.payload);
+    const proposal = getTransactionData(config.args, config.transientData, msg.payload);
+
+    return await invokeChaincodeInternal(RED, node, msg, decoder, actionType, connection, channelName, contractName, transactionName, proposal);
+}
+
+export async function invokeChaincodeGeneric(
+    RED: NodeAPI,
+    node: Node<{}>,
+    msg: NodeMessageInFlow,
+    decoder: FabricDecoderType,
+    actionType: string,
+    connection: ConnectionConfigModel, 
+    channelSelector: string,
+    contractName: string,
+    transactionName: string,
+    args?: string[],
+) {
+    const fabricChannelDef: FabricChannelDef = getConfigValidate(RED, channelSelector);
+    const proposal: ProposalOptions = {arguments: args}; 
+    return await invokeChaincodeInternal(RED, node, msg, decoder, actionType, connection, fabricChannelDef.channel, contractName, transactionName, proposal);
+}
+
+async function invokeChaincodeInternal(
+    RED: NodeAPI,
+    node: Node<{}>,
+    msg: NodeMessageInFlow,
+    decoder: FabricDecoderType,
+    actionType: string,
+    connection: ConnectionConfigModel, 
+    channelName: string,
+    contractName: string,
+    transactionName: string,
+    proposal: ProposalOptions,
+) {
+
+    const gateway = await getGateway(node, connection);
+    const network = gateway.getNetwork(channelName);
+    const contract = network.getContract(contractName);
+
+    let getResult;
+    if (actionType === 'submit') {
+        getResult = await contract.submit(transactionName, proposal);
+    } else if (actionType === 'evaluate') {
+        getResult = await contract.evaluate(transactionName, proposal);
+    } else {
+        throw new Error("Undefined action type: " + actionType);
+    }
+
+    addResultToPayload(RED, msg, transactionName, proposal, decoder(getResult));
+}
+
+function getTransactionData(configArgs: string, configTransient: string, payload: { transaction?: { args?: string[], transient?: string[] }}): ProposalOptions {
 
     return {
         arguments: getTransactionArg(),
@@ -137,32 +232,6 @@ export function getTransactionData(configArgs: string, configTransient: string, 
         }
         
         return transientData;
-    }
-}
-
-/**
- * Return the value if it is defined; otherwise thrown an error.
- * @param value A value that might not be defined.
- * @param message Error message if the value is not defined.
- */
-export function assertDefined<T>(value: T | null | undefined, message: string): T {
-    if (value == undefined) {
-        throw new Error(message);
-    }
-
-    return value;
-}
-
-export async function closeConnection(this: Node<{}>, connection: ConnectionConfigModel, done: () => void) {
-    try {
-        await closeGateway(this, connection);
-        this.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
-        this.debug('Closed');
-        done();
-
-    } catch (error: any) {
-        this.status({ fill: 'red', shape: 'dot', text: error });
-        done();
     }
 }
 

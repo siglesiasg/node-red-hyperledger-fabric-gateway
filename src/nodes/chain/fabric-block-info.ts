@@ -1,8 +1,9 @@
 import { Node, NodeAPI, NodeMessageInFlow } from "node-red";
+import { buildBlockDecoder } from "./../../libs/fabric-decoder";
 import { getGateway } from "../../libs/fabric-connection-pool";
+import { closeConnection, invokeChaincodeGeneric } from "../../libs/fabric-functions";
 import { addResultToPayload, getConfigValidate } from "../../libs/node-red-utils";
-import { closeConnection } from "../../libs/fabric-functions";
-import { ConnectionConfigModel, buildConnectionConfig } from "../../models/connection-config.model";
+import { buildConnectionConfig } from "../../models/connection-config.model";
 import { FabricBlockInfoDef } from "./fabric-block-info.def";
 import { buildBlockEventModel } from "./models/block.model";
 
@@ -16,17 +17,16 @@ export = (RED: NodeAPI): void => {
 
         const connection = buildConnectionConfig(RED, config);
         const fabricChannelDef = getConfigValidate(RED, config.channelSelector);
+        const blockDecoder = buildBlockDecoder(fabricChannelDef.channel);
 
         this.debug('Fabric Get Block By Number Node Created');
         this.status({ fill: 'green', shape: 'dot', text: "Ready" });
 
         this.on('input', async (msg: NodeMessageInFlow, send, done) => {
-            try {
-                this.status({ fill: 'yellow', shape: 'dot', text: "Querying..." });
 
-                const gateway = await getGateway(this, connection);
-                const network = gateway.getNetwork(fabricChannelDef.channel);
-                const contract = network.getContract('qscc');
+            try {
+
+                this.status({ fill: 'yellow', shape: 'dot', text: "Querying..." });
 
                 let transactionName;
                 let transactionArgs;
@@ -46,12 +46,7 @@ export = (RED: NodeAPI): void => {
                     throw new Error('Config method invalid: ' + config.method);
                 }
 
-                const blockBin = await contract.evaluateTransaction(transactionName, ...transactionArgs);
-
-                const blockModel = buildBlockEventModel(blockBin, fabricChannelDef.channel);
-
-                addResultToPayload(RED, msg, transactionName, transactionArgs, JSON.stringify(blockModel));
-                this.debug('Fabric Node Executed Get Block By Number');
+                await invokeChaincodeGeneric(RED, this, msg, blockDecoder, 'evaluate', connection, config.channelSelector, 'qscc', transactionName, transactionArgs);
 
                 this.status({ fill: 'green', shape: 'dot', text: "Done" });
                 

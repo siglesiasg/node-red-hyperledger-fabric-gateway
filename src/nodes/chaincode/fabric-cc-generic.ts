@@ -1,24 +1,19 @@
 import { Node, NodeAPI, NodeMessageInFlow } from "node-red";
-import { getGateway } from "../../libs/fabric-connection-pool";
-import { getTransactionName } from "../../libs/fabric-functions";
-import { addResultToPayload, getConfigValidate } from "../../libs/node-red-utils";
-import { closeConnection } from "../../libs/fabric-functions";
-import { ConnectionConfigModel, buildConnectionConfig } from "../../models/connection-config.model";
-import { FabricChannelDef } from "../config/fabric-channel.def";
-import { FabricContractDef } from "../config/fabric-contract.def";
+import { closeConnection, invokeChaincode } from "../../libs/fabric-functions";
+import { buildConnectionConfig } from "../../models/connection-config.model";
+import { buildGenericDecoder } from "./../../libs/fabric-decoder";
 import { FabricGenericDef } from "./fabric-cc-generic.def";
 
 export = (RED: NodeAPI): void => {
 
     RED.nodes.registerType('fabric-cc-generic', fabricGenericNode);
 
-    const utf8Decoder = new TextDecoder();
-
     function fabricGenericNode(this: Node<FabricGenericDef>, config: FabricGenericDef) {
         
         RED.nodes.createNode(this, config); // First line always!
 
         const connection = buildConnectionConfig(RED, config);
+        const genericDecoder = buildGenericDecoder();
 
         this.debug('Fabric Generic Node Created');
         this.status({ fill: 'green', shape: 'dot', text: "Ready" });
@@ -28,29 +23,7 @@ export = (RED: NodeAPI): void => {
                 
                 this.status({ fill: 'yellow', shape: 'dot', text: "Querying..." });
 
-                const fabricChannelDef: FabricChannelDef = getConfigValidate(RED, config.channelSelector);
-                const fabricContractDef: FabricContractDef = getConfigValidate(RED, config.contractSelector);
-
-                const gateway = await getGateway(this, connection);
-                const network = gateway.getNetwork(fabricChannelDef.channel);
-                const contract = network.getContract(fabricContractDef.contract);
-        
-                const transactionName = getTransactionName(config.transaction, msg.payload);
-                // const transactionArgs = getTransactionArgs(config.args, msg.payload);
-
-                let getResult; 
-                // if (config.actionType === 'submit') {
-                //     getResult = await contract.submit(transactionName, ...transactionArgs);
-                // } else if (config.actionType === 'evaluate') {
-                //     getResult = await contract.evaluate(transactionName, ...transactionArgs);
-                // } else {
-                //     throw new Error("Undefined action type: " + config.actionType);
-                // }
-                const decodedResult = utf8Decoder.decode(getResult);
-
-                // addResultToPayload(RED, msg, transactionName, transactionArgs, decodedResult);
-
-                this.debug('Fabric Node Executed Generic');
+                await invokeChaincode(RED, this, msg, genericDecoder, config.actionType, connection, config);
 
                 this.status({ fill: 'green', shape: 'dot', text: "Done" });
 
@@ -73,3 +46,4 @@ export = (RED: NodeAPI): void => {
     }    
 
 }
+
