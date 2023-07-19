@@ -8,7 +8,7 @@ export function buildGenericDecoder(): FabricDecoderType {
 }
 
 export function buildChannelInfoDecoder(): FabricDecoderType {
-    return (data) => JSON.stringify({ chainInfo: buildChannelInfoModel(data) });
+    return (data) => JSON.stringify(buildChannelInfoModel(data));
 }
 
 export function buildBlockDecoder(channel: string): FabricDecoderType {

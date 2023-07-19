@@ -4,8 +4,6 @@
         category: 'config',
         defaults: {
             name:               { value: '', required: true },
-            mspIdSelectorGw:    { value: '', required: true, type: 'fabric-mspid' },
-            //identitySelectorGw: { value: '', required: true, type: 'fabric-identity' },
             peerSelectorGw:     { value: '', required: true, type: 'fabric-peer' },
         },
 
@@ -21,11 +19,6 @@
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
         <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
-    </div>
-
-    <div class="form-row">
-        <label for="node-config-input-mspIdSelectorGw"><i class="fa"></i>Msp Id</label>
-        <input type="select" id="node-config-input-mspIdSelectorGw" />
     </div>
 
     <div class="form-row">

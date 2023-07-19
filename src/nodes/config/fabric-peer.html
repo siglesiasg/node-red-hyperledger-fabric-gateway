@@ -4,8 +4,13 @@
         category: 'config',
         defaults: {
             name:           {value: '' },
-            url:            {value: 'grcp://testpeer.com', required: true},
-            grpcOptions:    {value: '{\r\n    \"grpc.default_authority\": \"testpeer.com:9999\",\r\n    \"grpc.ssl_target_name_override\": \"testpeer.com\"\r\n}'},
+            url:            {value: 'testpeer.com', required: true},
+            tls:            {value: '',             required: false},
+            grpcOptions:    {value: '{\r\n    \"grpc.default_authority\": \"testpeer.com:9999\",\r\n    \"grpc.ssl_target_name_override\": \"testpeer.com\"\r\n}', validate: function(args, opt) {
+                if (!args) { return true; }
+                if (JSON.parse(args)) { return true; }
+                return 'GrpcOptions must be an object';
+            }},
         },
 
         label : function () {
@@ -53,6 +58,11 @@
     <div class="form-row">
         <label for="node-config-input-url"><i class="fa"></i>Url</label>
         <input type="text" id="node-config-input-url" placeholder=""/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-tls"><i class="fa"></i>Tls Cert</label>
+        <input type="text" id="node-config-input-tls" placeholder="LS0tLS1..."/>
     </div>
 
     <div class="form-row">

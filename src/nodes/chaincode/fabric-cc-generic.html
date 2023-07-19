@@ -17,7 +17,6 @@
                 return 'Args must be an array of strings';
             }},
             transientData:          { value: '', required: false, validate: function(args, opt) {
-                console.log('checking: ' + args)
                 if (!args) { return true; }
                 if (Array.isArray(JSON.parse(args))) { return true; }
                 return 'Args must be an array of strings';

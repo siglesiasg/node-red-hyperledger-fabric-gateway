@@ -17,7 +17,6 @@ interface GatewayConfigModel {
     gatewaySelector: string;
 
     name: string;
-    mspId: MspIdConfigModel;
     peer: PeerConfigModel;    
 }
 
@@ -57,7 +56,8 @@ interface PeerConfigModel {
 
     name: string;
     url: string;
-    grpcOptions: string;
+    tls?: string
+    grpcOptions?: string;
 }
 
 export function buildConnectionConfig(RED: NodeAPI, config: ConnectionNodeDef): ConnectionConfigModel {
@@ -67,21 +67,19 @@ export function buildConnectionConfig(RED: NodeAPI, config: ConnectionNodeDef): 
     const fabricChannelDef: FabricChannelDef = getConfigValidate(RED, config.channelSelector);
 
     return {
-        gateway: buildGateway(RED, fabricGatewayDef, fabricIdentityDef),
+        gateway: buildGateway(RED, fabricGatewayDef),
         identity: buildIdentity(RED, fabricIdentityDef),
         channel: buildChannel(fabricChannelDef)
     }
 
 }
-function buildGateway(RED: NodeAPI, fabricGatewayDef: FabricGatewayDef, fabricIdentityDef: FabricIdentityDef): GatewayConfigModel {
+function buildGateway(RED: NodeAPI, fabricGatewayDef: FabricGatewayDef): GatewayConfigModel {
 
     const fabricPeerDef: FabricPeerDef = getConfigValidate(RED, fabricGatewayDef.peerSelectorGw);
-    const fabricGatewaMspidDef = getConfigValidate(RED, fabricGatewayDef.mspIdSelectorGw);
 
     return {
         gatewaySelector: fabricGatewayDef.id,
         name: fabricGatewayDef.name,
-        mspId: buildMspId(fabricGatewaMspidDef),
         peer: buildPeer(fabricPeerDef)
     }
 }
@@ -126,10 +124,17 @@ function buildMspId(fabricMspIdDef: FabricMspIdDef): MspIdConfigModel {
 }
 
 function buildPeer(fabricPeerDef: FabricPeerDef): PeerConfigModel {
+    let url;
+    if (fabricPeerDef.url.startsWith('grpcs://')) {
+        url = fabricPeerDef.url.substring(8, fabricPeerDef.url.length)
+    } else {
+        url = fabricPeerDef.url;
+    }
     return {
         peerSelector: fabricPeerDef.id,
         name: fabricPeerDef.name,
-        url: fabricPeerDef.url,
+        url,
+        tls: fabricPeerDef.tls,
         grpcOptions: fabricPeerDef.grpcOptions,
     }
 }

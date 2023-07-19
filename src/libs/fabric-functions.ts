@@ -13,9 +13,14 @@ import { addResultToPayload, getConfigValidate } from './node-red-utils';
 
 export async function newGrpcConnection(connectionConfig: ConnectionConfigModel): Promise<GrpcClient> {
 
-    // const tlsRootCert = await fs.readFile(tlsCertPath);
-    // const tlsCredentials = grpc.credentials.createSsl(tlsRootCert);
-    const tlsCredentials = grpc.credentials.createInsecure();
+    let tlsCredentials;
+    if (connectionConfig.gateway.peer.tls) {
+        const tlsRootCert = Buffer.from(Buffer.from(connectionConfig.gateway.peer.tls, 'base64').toString('utf8'), 'utf8');
+        tlsCredentials = grpc.credentials.createSsl(tlsRootCert);
+    } else {
+        tlsCredentials = grpc.credentials.createInsecure();
+    }
+
     return new grpc.Client(connectionConfig.gateway.peer.url, tlsCredentials, connectionConfig.gateway.peer.grpcOptions as any);
 }
 
