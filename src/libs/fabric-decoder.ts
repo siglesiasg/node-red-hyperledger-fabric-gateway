@@ -4,13 +4,13 @@ import { buildChannelInfoModel } from './../nodes/chain/models/channel-info.mode
 export type FabricDecoderType = (getResult: Uint8Array) => string;
 
 export function buildGenericDecoder(): FabricDecoderType {
-    return (data) => new TextDecoder().decode(data);
+  return (data) => new TextDecoder().decode(data);
 }
 
 export function buildChannelInfoDecoder(): FabricDecoderType {
-    return (data) => JSON.stringify(buildChannelInfoModel(data));
+  return (data) => JSON.stringify(buildChannelInfoModel(data));
 }
 
 export function buildBlockDecoder(channel: string): FabricDecoderType {
-    return (data) => JSON.stringify(buildBlockEventModel(data, channel));
+  return (data) => JSON.stringify(buildBlockEventModel(data, channel));
 }

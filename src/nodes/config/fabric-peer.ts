@@ -4,12 +4,12 @@ import { FabricPeerDef } from './fabric-peer.def';
 
 export = function (RED: NodeAPI): void {
 
-    function fabricPeerNode(this: Node<FabricPeerDef>, config: FabricPeerDef) {
-        RED.nodes.createNode(this, config);
-        addConfiguration(this, config);
-    }
+  function fabricPeerNode(this: Node<FabricPeerDef>, config: FabricPeerDef) {
+    RED.nodes.createNode(this, config);
+    addConfiguration(this, config);
+  }
 
-    RED.nodes.registerType('fabric-peer', fabricPeerNode);
+  RED.nodes.registerType('fabric-peer', fabricPeerNode);
 
 }
 

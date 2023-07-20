@@ -62,79 +62,79 @@ interface PeerConfigModel {
 
 export function buildConnectionConfig(RED: NodeAPI, config: ConnectionNodeDef): ConnectionConfigModel {
 
-    const fabricGatewayDef: FabricGatewayDef = getConfigValidate(RED, config.gatewaySelector);
-    const fabricIdentityDef: FabricIdentityDef = getConfigValidate(RED, config.identitySelector);
-    const fabricChannelDef: FabricChannelDef = getConfigValidate(RED, config.channelSelector);
+  const fabricGatewayDef: FabricGatewayDef = getConfigValidate(RED, config.gatewaySelector);
+  const fabricIdentityDef: FabricIdentityDef = getConfigValidate(RED, config.identitySelector);
+  const fabricChannelDef: FabricChannelDef = getConfigValidate(RED, config.channelSelector);
 
-    return {
-        gateway: buildGateway(RED, fabricGatewayDef),
-        identity: buildIdentity(RED, fabricIdentityDef),
-        channel: buildChannel(fabricChannelDef)
-    };
+  return {
+    gateway: buildGateway(RED, fabricGatewayDef),
+    identity: buildIdentity(RED, fabricIdentityDef),
+    channel: buildChannel(fabricChannelDef)
+  };
 
 }
 function buildGateway(RED: NodeAPI, fabricGatewayDef: FabricGatewayDef): GatewayConfigModel {
 
-    const fabricPeerDef: FabricPeerDef = getConfigValidate(RED, fabricGatewayDef.peerSelectorGw);
+  const fabricPeerDef: FabricPeerDef = getConfigValidate(RED, fabricGatewayDef.peerSelectorGw);
 
-    return {
-        gatewaySelector: fabricGatewayDef.id,
-        name: fabricGatewayDef.name,
-        peer: buildPeer(fabricPeerDef)
-    };
+  return {
+    gatewaySelector: fabricGatewayDef.id,
+    name: fabricGatewayDef.name,
+    peer: buildPeer(fabricPeerDef)
+  };
 }
 
 function buildIdentity(RED: NodeAPI, fabricIdentityDef: FabricIdentityDef): IdentityConfigModel {
 
-    const fabricIdentityMspidDef = getConfigValidate(RED, fabricIdentityDef.mspIdSelector);
-    return {
-        identitySelector: fabricIdentityDef.id,
-        name: fabricIdentityDef.name,
+  const fabricIdentityMspidDef = getConfigValidate(RED, fabricIdentityDef.mspIdSelector);
+  return {
+    identitySelector: fabricIdentityDef.id,
+    name: fabricIdentityDef.name,
 
-        certType: fabricIdentityDef.certType,
+    certType: fabricIdentityDef.certType,
 
-        cert: fabricIdentityDef.cert,
-        privateKey: fabricIdentityDef.privateKey,
-        ca: fabricIdentityDef.ca,
+    cert: fabricIdentityDef.cert,
+    privateKey: fabricIdentityDef.privateKey,
+    ca: fabricIdentityDef.ca,
 
-        certPath: fabricIdentityDef.certPath,
-        privateKeyPath: fabricIdentityDef.privateKeyPath,
+    certPath: fabricIdentityDef.certPath,
+    privateKeyPath: fabricIdentityDef.privateKeyPath,
 
-        microfabUrl: fabricIdentityDef.microfabUrl,
-        microfabId: fabricIdentityDef.microfabId,
+    microfabUrl: fabricIdentityDef.microfabUrl,
+    microfabId: fabricIdentityDef.microfabId,
 
-        mspId: buildMspId(fabricIdentityMspidDef)
-    };
+    mspId: buildMspId(fabricIdentityMspidDef)
+  };
 }
 
 function buildChannel(fabricChannelDef: FabricChannelDef): ChannelConfigModel {
-    return {
-        channelSelector: fabricChannelDef.id,
-        name: fabricChannelDef.name,
-        channel: fabricChannelDef.channel
-    };
+  return {
+    channelSelector: fabricChannelDef.id,
+    name: fabricChannelDef.name,
+    channel: fabricChannelDef.channel
+  };
 }
 
 function buildMspId(fabricMspIdDef: FabricMspIdDef): MspIdConfigModel {
-    return {
-        mspIdSelector: fabricMspIdDef.id,
-        name: fabricMspIdDef.name,
-        mspId: fabricMspIdDef.mspId,
-    };
+  return {
+    mspIdSelector: fabricMspIdDef.id,
+    name: fabricMspIdDef.name,
+    mspId: fabricMspIdDef.mspId,
+  };
 }
 
 function buildPeer(fabricPeerDef: FabricPeerDef): PeerConfigModel {
-    let url;
-    if (fabricPeerDef.url.startsWith('grpcs://')) {
-        url = fabricPeerDef.url.substring(8, fabricPeerDef.url.length);
-    } else {
-        url = fabricPeerDef.url;
-    }
-    return {
-        peerSelector: fabricPeerDef.id,
-        name: fabricPeerDef.name,
-        url,
-        tls: fabricPeerDef.tls,
-        grpcOptions: fabricPeerDef.grpcOptions,
-    };
+  let url;
+  if (fabricPeerDef.url.startsWith('grpcs://')) {
+    url = fabricPeerDef.url.substring(8, fabricPeerDef.url.length);
+  } else {
+    url = fabricPeerDef.url;
+  }
+  return {
+    peerSelector: fabricPeerDef.id,
+    name: fabricPeerDef.name,
+    url,
+    tls: fabricPeerDef.tls,
+    grpcOptions: fabricPeerDef.grpcOptions,
+  };
 }

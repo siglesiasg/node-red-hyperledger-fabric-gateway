@@ -4,11 +4,11 @@ import { addConfiguration } from './../../libs/node-red-utils';
 
 export = function (RED: NodeAPI): void {
 
-    function fabricChaincodeNode(this: Node<FabricContractDef>, config: FabricContractDef) {
-        RED.nodes.createNode(this, config);
-        addConfiguration(this, config);
-    }
+  function fabricChaincodeNode(this: Node<FabricContractDef>, config: FabricContractDef) {
+    RED.nodes.createNode(this, config);
+    addConfiguration(this, config);
+  }
 
-    RED.nodes.registerType('fabric-contract', fabricChaincodeNode);
+  RED.nodes.registerType('fabric-contract', fabricChaincodeNode);
 
 }

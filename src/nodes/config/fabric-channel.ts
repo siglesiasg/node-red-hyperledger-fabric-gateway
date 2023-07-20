@@ -4,11 +4,11 @@ import { addConfiguration } from './../../libs/node-red-utils';
 
 export = function (RED: NodeAPI): void {
 
-    function fabricChannelNode(this: Node<FabricChannelDef>, config: FabricChannelDef) {
-        RED.nodes.createNode(this, config);
-        addConfiguration(this, config);
-    }
+  function fabricChannelNode(this: Node<FabricChannelDef>, config: FabricChannelDef) {
+    RED.nodes.createNode(this, config);
+    addConfiguration(this, config);
+  }
 
-    RED.nodes.registerType('fabric-channel', fabricChannelNode);
+  RED.nodes.registerType('fabric-channel', fabricChannelNode);
 
 }

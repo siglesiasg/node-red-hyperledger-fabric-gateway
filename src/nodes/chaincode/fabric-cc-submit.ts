@@ -7,43 +7,43 @@ import { FabricCCSubmitDef } from './fabric-cc-submit.def';
 
 export = (RED: NodeAPI): void => {
 
-    RED.nodes.registerType('fabric-cc-submit', fabricCCSubmitNode);
+  RED.nodes.registerType('fabric-cc-submit', fabricCCSubmitNode);
 
-    function fabricCCSubmitNode(this: Node<FabricCCSubmitDef>, config: FabricCCSubmitDef) {
+  function fabricCCSubmitNode(this: Node<FabricCCSubmitDef>, config: FabricCCSubmitDef) {
 
-        RED.nodes.createNode(this, config); // First line always!
+    RED.nodes.createNode(this, config); // First line always!
 
-        const connection = buildConnectionConfig(RED, config);
-        const genericDecoder = buildGenericDecoder();
+    const connection = buildConnectionConfig(RED, config);
+    const genericDecoder = buildGenericDecoder();
 
-        this.debug('Fabric Generic Node Created');
-        this.status({ fill: 'green', shape: 'dot', text: 'Ready' });
+    this.debug('Fabric Generic Node Created');
+    this.status({ fill: 'green', shape: 'dot', text: 'Ready' });
 
-        this.on('input', async (msg: NodeMessageInFlow, send, done) => {
-            try {
+    this.on('input', async (msg: NodeMessageInFlow, send, done) => {
+      try {
 
-                this.status({ fill: 'yellow', shape: 'dot', text: 'Querying...' });
+        this.status({ fill: 'yellow', shape: 'dot', text: 'Querying...' });
 
-                await invokeChaincode(RED, this, msg, genericDecoder, 'submit', connection, config);
+        await invokeChaincode(RED, this, msg, genericDecoder, 'submit', connection, config);
 
-                this.status({ fill: 'green', shape: 'dot', text: 'Done' });
+        this.status({ fill: 'green', shape: 'dot', text: 'Done' });
 
-                send(msg);
-                done();
+        send(msg);
+        done();
 
-            } catch (error: any) {
-                this.status({ fill: 'red', shape: 'dot', text: error });
-                done(error);
-            }
+      } catch (error: any) {
+        this.status({ fill: 'red', shape: 'dot', text: error });
+        done(error);
+      }
 
-        });
+    });
 
 
-        // removed -> "Node disabled / deleted" | !removed -> "Node is reestarted"
-        this.on('close', async (removed: boolean, done: () => void) => {
-            await closeConnection.call(this, connection, done);
-        });
+    // removed -> "Node disabled / deleted" | !removed -> "Node is reestarted"
+    this.on('close', async (removed: boolean, done: () => void) => {
+      await closeConnection.call(this, connection, done);
+    });
 
-    }
+  }
 
 }

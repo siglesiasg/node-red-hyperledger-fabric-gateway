@@ -4,11 +4,11 @@ import { Node, NodeAPI } from 'node-red';
 
 export = function (RED: NodeAPI): void {
 
-    function fabricMspIdNode(this: Node<FabricMspIdDef>, config: FabricMspIdDef) {
-        RED.nodes.createNode(this, config);
-        addConfiguration(this, config);
-    }
+  function fabricMspIdNode(this: Node<FabricMspIdDef>, config: FabricMspIdDef) {
+    RED.nodes.createNode(this, config);
+    addConfiguration(this, config);
+  }
 
-    RED.nodes.registerType('fabric-mspid', fabricMspIdNode);
+  RED.nodes.registerType('fabric-mspid', fabricMspIdNode);
 
 }
