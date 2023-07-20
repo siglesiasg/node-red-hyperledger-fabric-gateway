@@ -1,11 +1,11 @@
-import { NodeAPI } from "node-red";
-import { getConfigValidate } from "./../libs/node-red-utils";
-import { FabricChannelDef } from "./../nodes/config/fabric-channel.def";
-import { FabricGatewayDef } from "./../nodes/config/fabric-gateway.def";
-import { FabricIdentityDef } from "./../nodes/config/fabric-identity.def";
-import { FabricMspIdDef } from "./../nodes/config/fabric-mspid.def";
-import { FabricPeerDef } from "./../nodes/config/fabric-peer.def";
-import { ConnectionNodeDef } from "./../nodes/connection-config-node.def";
+import { NodeAPI } from 'node-red';
+import { getConfigValidate } from './../libs/node-red-utils';
+import { FabricChannelDef } from './../nodes/config/fabric-channel.def';
+import { FabricGatewayDef } from './../nodes/config/fabric-gateway.def';
+import { FabricIdentityDef } from './../nodes/config/fabric-identity.def';
+import { FabricMspIdDef } from './../nodes/config/fabric-mspid.def';
+import { FabricPeerDef } from './../nodes/config/fabric-peer.def';
+import { ConnectionNodeDef } from './../nodes/connection-config-node.def';
 
 export interface ConnectionConfigModel {
     gateway: GatewayConfigModel;
@@ -17,7 +17,7 @@ interface GatewayConfigModel {
     gatewaySelector: string;
 
     name: string;
-    peer: PeerConfigModel;    
+    peer: PeerConfigModel;
 }
 
 export interface IdentityConfigModel {
@@ -25,10 +25,10 @@ export interface IdentityConfigModel {
 
     name: string;
     mspId: MspIdConfigModel
-    certType: string;    
+    certType: string;
     cert?: string;
     privateKey?: string;
-    ca: string;    
+    ca: string;
 
     certPath?: string;
     privateKeyPath?: string;
@@ -41,7 +41,7 @@ interface ChannelConfigModel {
     channelSelector: string;
 
     name: string;
-    channel: string;    
+    channel: string;
 }
 
 interface MspIdConfigModel {
@@ -70,7 +70,7 @@ export function buildConnectionConfig(RED: NodeAPI, config: ConnectionNodeDef): 
         gateway: buildGateway(RED, fabricGatewayDef),
         identity: buildIdentity(RED, fabricIdentityDef),
         channel: buildChannel(fabricChannelDef)
-    }
+    };
 
 }
 function buildGateway(RED: NodeAPI, fabricGatewayDef: FabricGatewayDef): GatewayConfigModel {
@@ -81,7 +81,7 @@ function buildGateway(RED: NodeAPI, fabricGatewayDef: FabricGatewayDef): Gateway
         gatewaySelector: fabricGatewayDef.id,
         name: fabricGatewayDef.name,
         peer: buildPeer(fabricPeerDef)
-    }
+    };
 }
 
 function buildIdentity(RED: NodeAPI, fabricIdentityDef: FabricIdentityDef): IdentityConfigModel {
@@ -104,7 +104,7 @@ function buildIdentity(RED: NodeAPI, fabricIdentityDef: FabricIdentityDef): Iden
         microfabId: fabricIdentityDef.microfabId,
 
         mspId: buildMspId(fabricIdentityMspidDef)
-    }
+    };
 }
 
 function buildChannel(fabricChannelDef: FabricChannelDef): ChannelConfigModel {
@@ -112,7 +112,7 @@ function buildChannel(fabricChannelDef: FabricChannelDef): ChannelConfigModel {
         channelSelector: fabricChannelDef.id,
         name: fabricChannelDef.name,
         channel: fabricChannelDef.channel
-    }
+    };
 }
 
 function buildMspId(fabricMspIdDef: FabricMspIdDef): MspIdConfigModel {
@@ -120,13 +120,13 @@ function buildMspId(fabricMspIdDef: FabricMspIdDef): MspIdConfigModel {
         mspIdSelector: fabricMspIdDef.id,
         name: fabricMspIdDef.name,
         mspId: fabricMspIdDef.mspId,
-    }
+    };
 }
 
 function buildPeer(fabricPeerDef: FabricPeerDef): PeerConfigModel {
     let url;
     if (fabricPeerDef.url.startsWith('grpcs://')) {
-        url = fabricPeerDef.url.substring(8, fabricPeerDef.url.length)
+        url = fabricPeerDef.url.substring(8, fabricPeerDef.url.length);
     } else {
         url = fabricPeerDef.url;
     }
@@ -136,5 +136,5 @@ function buildPeer(fabricPeerDef: FabricPeerDef): PeerConfigModel {
         url,
         tls: fabricPeerDef.tls,
         grpcOptions: fabricPeerDef.grpcOptions,
-    }
+    };
 }

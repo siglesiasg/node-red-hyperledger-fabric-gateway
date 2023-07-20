@@ -36,6 +36,7 @@ rules:
   no-tabs: error
   no-trailing-spaces: error
   # no-use-before-define: error
+  "@typescript-eslint/no-explicit-any": off
   no-useless-call: error
   no-with: error
   operator-linebreak: error

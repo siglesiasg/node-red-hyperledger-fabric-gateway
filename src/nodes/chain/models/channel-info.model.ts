@@ -1,4 +1,4 @@
-import { BlockchainInfo } from "@hyperledger/fabric-protos/lib/common";
+import { BlockchainInfo } from '@hyperledger/fabric-protos/lib/common';
 
 export class ChannelInfoModel {
     height: number;
@@ -10,5 +10,5 @@ export function buildChannelInfoModel(chainInfoBin: Uint8Array): ChannelInfoMode
     return {
         height: info.getHeight(),
         lastBlockHash: info.getCurrentblockhash_asB64()
-    }
+    };
 }

@@ -1,4 +1,4 @@
-import { NodeDef } from "node-red";
+import { NodeDef } from 'node-red';
 
 export interface FabricIdentityDef extends NodeDef {
     name: string;

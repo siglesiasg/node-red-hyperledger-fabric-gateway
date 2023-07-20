@@ -15,7 +15,8 @@
         "cpy-res-config": "cpy ./src/nodes/config/*.html ./dist/nodes/config",
         "cpy-res-chain": "cpy ./src/nodes/chain/*.html ./dist/nodes/chain && cpy ./src/nodes/chain/icons/* ./dist/nodes/chain/icons/",
         "cpy-res-chaincode": "cpy ./src/nodes/chaincode/*.html ./dist/nodes/chaincode && cpy ./src/nodes/chaincode/icons/* ./dist/nodes/chaincode/icons/",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "lint-fix": "eslint --fix ."
     },
     "dependencies": {
         "@chriscdn/promise-semaphore": "^2.0.1",

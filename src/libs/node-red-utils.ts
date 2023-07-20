@@ -1,5 +1,5 @@
-import { Proposal, ProposalOptions } from "@hyperledger/fabric-gateway";
-import { Node, NodeAPI, NodeDef, NodeMessageInFlow } from "node-red";
+import { ProposalOptions } from '@hyperledger/fabric-gateway';
+import { Node, NodeAPI, NodeDef, NodeMessageInFlow } from 'node-red';
 
 export function addSharedData(node: Node, key: string, sharedData: any) {
     const nodeAny = node as any;
@@ -24,7 +24,7 @@ export function getSharedData(RED: NodeAPI, nodeId: string, key: string) {
         return undefined;
     }
 
-};
+}
 
 export function addConfiguration(node: Node, config: NodeDef) {
     const nodeAny = node as any;
@@ -33,7 +33,7 @@ export function addConfiguration(node: Node, config: NodeDef) {
     }
     nodeAny.internalConfig = config;
     node.debug(`Updating data of ${node.name?node.name:'nodeId[' + node.id + ']'}`);
-};
+}
 
 export function getConfig(node: Node) {
     const nodeAny = node as any;
@@ -42,27 +42,27 @@ export function getConfig(node: Node) {
     } else {
         return undefined;
     }
-};
+}
 
 export function getConfigValidate(RED: NodeAPI, nodeId: string) {
     const nodeAny = RED.nodes.getNode(nodeId) as any;
     if (!nodeAny) {
-        throw new Error("Unable to get config node with id: " + nodeId + ". Is this node enabled and available?");
+        throw new Error('Unable to get config node with id: ' + nodeId + '. Is this node enabled and available?');
     }
-    
+
     if (nodeAny.internalConfig) {
         return nodeAny.internalConfig;
     } else {
-        throw new Error("Unable to get internal config node with id: " + nodeId + ". Is this node filled with internal config info?");
+        throw new Error('Unable to get internal config node with id: ' + nodeId + '. Is this node filled with internal config info?');
     }
-};
+}
 
 export function addEventToPayload(RED: NodeAPI, msg: NodeMessageInFlow, decodedResult: string) {
     const data = {
         event: decodedResult?JSON.parse(decodedResult):undefined
-    }
+    };
 
-    RED.util.setMessageProperty(msg, "payload", data, true);
+    RED.util.setMessageProperty(msg, 'payload', data, true);
 }
 
 export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, transactionName: string, transactionArgs: string[] | ProposalOptions, decodedResult: string) {
@@ -78,7 +78,7 @@ export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, transac
         data = {
             args: (transactionArgs as ProposalOptions).arguments,
             transient: (transactionArgs as ProposalOptions).transientData,
-        };        
+        };
     }
 
     const payloadData = {
@@ -87,8 +87,8 @@ export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, transac
             transaction: data
         },
         result: decodedResult?JSON.parse(decodedResult):undefined
-    };    
+    };
 
 
-    RED.util.setMessageProperty(msg, "payload", payloadData, true);
+    RED.util.setMessageProperty(msg, 'payload', payloadData, true);
 }

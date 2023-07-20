@@ -3,7 +3,7 @@ import { connect, ConnectOptions, Gateway, GrpcClient, Identity, ProposalOptions
 import { Buffer } from 'buffer';
 import * as crypto from 'crypto';
 import { promises as fs } from 'fs';
-import { Node, NodeAPI, NodeMessageInFlow } from 'node-red';
+import { Node, NodeAPI, NodeDef, NodeMessageInFlow } from 'node-red';
 import { ConnectionConfigModel } from 'src/models/connection-config.model';
 import { ChaincodeNodeDef } from 'src/nodes/chaincode-config-node.def';
 import { FabricChannelDef } from 'src/nodes/config/fabric-channel.def';
@@ -34,7 +34,7 @@ export async function newIdentity(connectionConfig: ConnectionConfigModel): Prom
 
         const privateKeyPem = Buffer.from(connectionConfig.identity.privateKey, 'base64').toString('utf8');
         privateKey = crypto.createPrivateKey(privateKeyPem);
-        
+
     } else if (connectionConfig.identity.certType === 'files') {
 
         credentials = await fs.readFile(connectionConfig.identity.certPath);
@@ -48,17 +48,17 @@ export async function newIdentity(connectionConfig: ConnectionConfigModel): Prom
             const dataufab = await fetch(connectionConfig.identity.microfabUrl + '/ak/api/v1/components');
             const bodyJson = await dataufab.json();
             const ufabIdentity = findCertById(bodyJson, connectionConfig.identity.microfabId);
-    
+
             credentials = Buffer.from(Buffer.from(ufabIdentity.cert, 'base64').toString('utf8'), 'utf8');
-            
+
             const privateKeyPem = Buffer.from(ufabIdentity.private_key, 'base64').toString('utf8');
             privateKey = crypto.createPrivateKey(privateKeyPem);
         } catch (err) {
             throw new Error(`Unable to build identity from microfab. ${err}`);
-        } 
+        }
 
     } else {
-        throw new Error('Unable to get identity with cert type: ' + connectionConfig.identity.certType + ". Not implemented");
+        throw new Error('Unable to get identity with cert type: ' + connectionConfig.identity.certType + '. Not implemented');
     }
 
     return { identity: { mspId: connectionConfig.identity.mspId.mspId, credentials }, signer: signers.newPrivateKeySigner(privateKey) };
@@ -86,7 +86,7 @@ export async function buildGatewayConnection(grpcClient: GrpcClient, connectionC
         },
     };
 
-    return connect(options);    
+    return connect(options);
 }
 
 export function getTransactionName(configTransaction: string, payload: { transactionName?: string; }) {
@@ -97,7 +97,7 @@ export function getTransactionName(configTransaction: string, payload: { transac
         transactionName = configTransaction;
     }
     if (!transactionName) {
-        throw Error("Transaction name not defined in config nor payload");
+        throw Error('Transaction name not defined in config nor payload');
     }
     return transactionName;
 }
@@ -108,14 +108,14 @@ export function getTransactionName(configTransaction: string, payload: { transac
  * @param message Error message if the value is not defined.
  */
 export function assertDefined<T>(value: T | null | undefined, message: string): T {
-    if (value == undefined) {
+    if (value === undefined) {
         throw new Error(message);
     }
 
     return value;
 }
 
-export async function closeConnection(this: Node<{}>, connection: ConnectionConfigModel, done: () => void) {
+export async function closeConnection(this: Node<NodeDef>, connection: ConnectionConfigModel, done: () => void) {
     try {
         await closeGateway(this, connection);
         this.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
@@ -130,7 +130,7 @@ export async function closeConnection(this: Node<{}>, connection: ConnectionConf
 
 export async function invokeChaincode(
     RED: NodeAPI,
-    node: Node<{}>,
+    node: Node<NodeDef>,
     msg: NodeMessageInFlow,
     decoder: FabricDecoderType,
     actionType: string,
@@ -148,28 +148,28 @@ export async function invokeChaincode(
 
 export async function invokeChaincodeGeneric(
     RED: NodeAPI,
-    node: Node<{}>,
+    node: Node<NodeDef>,
     msg: NodeMessageInFlow,
     decoder: FabricDecoderType,
     actionType: string,
-    connection: ConnectionConfigModel, 
+    connection: ConnectionConfigModel,
     channelSelector: string,
     contractName: string,
     transactionName: string,
     args?: string[],
 ) {
     const fabricChannelDef: FabricChannelDef = getConfigValidate(RED, channelSelector);
-    const proposal: ProposalOptions = {arguments: args}; 
+    const proposal: ProposalOptions = {arguments: args};
     return await invokeChaincodeInternal(RED, node, msg, decoder, actionType, connection, fabricChannelDef.channel, contractName, transactionName, proposal);
 }
 
 async function invokeChaincodeInternal(
     RED: NodeAPI,
-    node: Node<{}>,
+    node: Node<NodeDef>,
     msg: NodeMessageInFlow,
     decoder: FabricDecoderType,
     actionType: string,
-    connection: ConnectionConfigModel, 
+    connection: ConnectionConfigModel,
     channelName: string,
     contractName: string,
     transactionName: string,
@@ -186,7 +186,7 @@ async function invokeChaincodeInternal(
     } else if (actionType === 'evaluate') {
         getResult = await contract.evaluate(transactionName, proposal);
     } else {
-        throw new Error("Undefined action type: " + actionType);
+        throw new Error('Undefined action type: ' + actionType);
     }
 
     addResultToPayload(RED, msg, transactionName, proposal, decoder(getResult));
@@ -197,7 +197,7 @@ function getTransactionData(configArgs: string, configTransient: string, payload
     return {
         arguments: getTransactionArg(),
         transientData: getTransactionTransient()
-    };    
+    };
 
     function getTransactionArg() {
         let transactionArgs;
@@ -208,17 +208,17 @@ function getTransactionData(configArgs: string, configTransient: string, payload
             try {
                 transactionArgs = JSON.parse(configArgs);
             } catch (e) {
-                throw new Error("Configuration Args is not an array!");
+                throw new Error('Configuration Args is not an array!');
             }
 
         }
 
         if (transactionArgs && !Array.isArray(transactionArgs)) {
-            throw new Error("Configuration Args is not an array!");
+            throw new Error('Configuration Args is not an array!');
         }
 
         return transactionArgs;
-    }    
+    }
 
     function getTransactionTransient() {
         let transientData;
@@ -228,14 +228,14 @@ function getTransactionData(configArgs: string, configTransient: string, payload
             try {
                 transientData = JSON.parse(configTransient);
             } catch (e) {
-                throw new Error("Transient args is not an array! " + configTransient);
+                throw new Error('Transient args is not an array! ' + configTransient);
             }
         }
 
         if (transientData && !Array.isArray(transientData)) {
-            throw new Error("Transient args is not an array");
+            throw new Error('Transient args is not an array');
         }
-        
+
         return transientData;
     }
 }
@@ -244,13 +244,13 @@ function findCertById(data: any, id: string) {
     try {
 
         for (const item of data) {
-            if (item.id === id && item.type === "identity") {
+            if (item.id === id && item.type === 'identity') {
                 return item;
             }
         }
     } catch (err) {
-        throw new Error('Unable to get Identity from microfab. Id: ' + id + ". Error: " + err);
+        throw new Error('Unable to get Identity from microfab. Id: ' + id + '. Error: ' + err);
     }
-    
+
     throw new Error('Unable to get Identity from microfab. Id: ' + id);
 }

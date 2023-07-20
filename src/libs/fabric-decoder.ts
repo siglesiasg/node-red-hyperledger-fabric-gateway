@@ -1,5 +1,5 @@
-import { buildBlockEventModel } from "./../nodes/chain/models/block.model";
-import { buildChannelInfoModel } from "./../nodes/chain/models/channel-info.model";
+import { buildBlockEventModel } from './../nodes/chain/models/block.model';
+import { buildChannelInfoModel } from './../nodes/chain/models/channel-info.model';
 
 export type FabricDecoderType = (getResult: Uint8Array) => string;
 

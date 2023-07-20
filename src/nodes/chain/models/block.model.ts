@@ -1,5 +1,5 @@
-import { Block } from "@hyperledger/fabric-protos/lib/common";
-import { NamespaceReadWriteSetProtos, TransactionProtos, parseBlock } from "../../../libs/fabric-parse-block";
+import { Block } from '@hyperledger/fabric-protos/lib/common';
+import { NamespaceReadWriteSetProtos, TransactionProtos, parseBlock } from '../../../libs/fabric-parse-block';
 
 const utf8Decoder = new TextDecoder();
 
@@ -19,7 +19,7 @@ export class TransactionModel {
     // getChannelHeader(): common.ChannelHeader;
     // getCreator(): Identity;
     // getValidationCode(): number;
-    
+
     // getNamespaceReadWriteSets(): NamespaceReadWriteSetModel[];
     // toProto(): common.Payload;
 }
@@ -46,7 +46,7 @@ export function buildBlockEventModel(blockData: Block | Uint8Array, channelId: s
         blockHash: blockProtos.getHash(),
         channelId,
         transactions: getTransactions(blockProtos.getTransactions()),
-    }
+    };
 }
 
 function getTransactions(transactions: TransactionProtos[]): TransactionModel[] {
@@ -64,7 +64,7 @@ function getTransactions(transactions: TransactionProtos[]): TransactionModel[] 
     return tx;
 }
 
-// 
+//
 function getRWSet(rwsetProtos: NamespaceReadWriteSetProtos[]): RWSetModel[] {
     const rw: RWSetModel[] = [];
     let rwIndex = 0;
@@ -79,7 +79,7 @@ function getRWSet(rwsetProtos: NamespaceReadWriteSetProtos[]): RWSetModel[] {
             } else {
                 data = JSON.parse(utf8Decoder.decode(writeProtos.getValue_asU8()));
             }
-            
+
             rw.push({
                 rwIndex,
                 key,

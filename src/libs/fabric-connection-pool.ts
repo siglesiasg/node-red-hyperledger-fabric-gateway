@@ -1,7 +1,7 @@
-import { Gateway, GrpcClient } from "@hyperledger/fabric-gateway";
-import { Node } from "node-red";
-import { ConnectionConfigModel } from "src/models/connection-config.model";
-import { buildGatewayConnection, newGrpcConnection } from "./fabric-functions";
+import { Gateway, GrpcClient } from '@hyperledger/fabric-gateway';
+import { Node, NodeDef } from 'node-red';
+import { ConnectionConfigModel } from 'src/models/connection-config.model';
+import { buildGatewayConnection, newGrpcConnection } from './fabric-functions';
 
 const connectionMap = new Map<string, GrpcClient> ();
 const gatewayMap = new Map<string, Gateway> ();
@@ -9,21 +9,21 @@ const gatewayMap = new Map<string, Gateway> ();
 const connectionOwners = new Map<GrpcClient, Set<string>> ();
 const gatewayOwners = new Map<Gateway, Set<string>> ();
 
-export async function closeGateway(ownerNode: Node<{}>, connection: ConnectionConfigModel) {
-    ownerNode.debug(`Closing Gateway`);
+export async function closeGateway(ownerNode: Node<NodeDef>, connection: ConnectionConfigModel) {
+    ownerNode.debug('Closing Gateway');
     await releaseGateway(ownerNode, connection);
     await releaseGrpcClient(ownerNode, connection);
 }
 
-export async function getGateway(ownerNode: Node<{}>, connection: ConnectionConfigModel): Promise<Gateway> {
-    
+export async function getGateway(ownerNode: Node<NodeDef>, connection: ConnectionConfigModel): Promise<Gateway> {
+
     const grpcClient: GrpcClient = await buildGrpcClient(ownerNode, connection);
 
-    return await buildGateway(grpcClient, ownerNode, connection);    
+    return await buildGateway(grpcClient, ownerNode, connection);
 
 }
 
-async function buildGateway(grpcClient: GrpcClient, ownerNode: Node<{}>, connection: ConnectionConfigModel) {
+async function buildGateway(grpcClient: GrpcClient, ownerNode: Node<NodeDef>, connection: ConnectionConfigModel) {
     let gateway: Gateway;
     // Build Gateway
     if (gatewayMap.has(connection.identity.identitySelector)) {
@@ -31,7 +31,7 @@ async function buildGateway(grpcClient: GrpcClient, ownerNode: Node<{}>, connect
     } else {
         gateway = await buildGatewayConnection(grpcClient, connection);
         gatewayMap.set(connection.identity.identitySelector, gateway);
-        ownerNode.debug("Added new gateway to gateway map. Current Size: " + connectionMap.size);
+        ownerNode.debug('Added new gateway to gateway map. Current Size: ' + connectionMap.size);
 
     }
     // Save in Gateway Owners
@@ -43,7 +43,7 @@ async function buildGateway(grpcClient: GrpcClient, ownerNode: Node<{}>, connect
     return gateway;
 }
 
-async function buildGrpcClient(ownerNode: Node<{}>, connection: ConnectionConfigModel) {
+async function buildGrpcClient(ownerNode: Node<NodeDef>, connection: ConnectionConfigModel) {
     let grpcClient: GrpcClient;
 
     // Build Grpc Client and save in cache map
@@ -52,7 +52,7 @@ async function buildGrpcClient(ownerNode: Node<{}>, connection: ConnectionConfig
     } else {
         grpcClient = await newGrpcConnection(connection);
         connectionMap.set(connection.gateway.peer.peerSelector, grpcClient);
-        ownerNode.debug("Added new connection to connection map. Current Size: " + connectionMap.size);
+        ownerNode.debug('Added new connection to connection map. Current Size: ' + connectionMap.size);
     }
 
     // Save in Grpc Owners
@@ -64,7 +64,7 @@ async function buildGrpcClient(ownerNode: Node<{}>, connection: ConnectionConfig
     return grpcClient;
 }
 
-async function releaseGrpcClient(ownerNode: Node<{}>, connection: ConnectionConfigModel) {
+async function releaseGrpcClient(ownerNode: Node<NodeDef>, connection: ConnectionConfigModel) {
 
     const grpcClient: GrpcClient = await buildGrpcClient(ownerNode, connection);
 
@@ -82,14 +82,14 @@ async function releaseGrpcClient(ownerNode: Node<{}>, connection: ConnectionConf
 
         // Drop owner node from list
         owners.delete(ownerNode.id);
-        ownerNode.debug("Remaining nodes attached to Grpc Client: " + owners.size);
+        ownerNode.debug('Remaining nodes attached to Grpc Client: ' + owners.size);
 
     } else {
         ownerNode.warn('Trying to close unknown Grpc Client');
     }
 }
 
-async function releaseGateway(ownerNode: Node<{}>, connection: ConnectionConfigModel) {
+async function releaseGateway(ownerNode: Node<NodeDef>, connection: ConnectionConfigModel) {
 
     const gateway = await getGateway(ownerNode, connection);
     if (gatewayOwners.has(gateway)) {
@@ -106,7 +106,7 @@ async function releaseGateway(ownerNode: Node<{}>, connection: ConnectionConfigM
 
         // Drop owner node from list
         owners.delete(ownerNode.id);
-        ownerNode.debug("Remaining nodes attached to gateway: " + owners);
+        ownerNode.debug('Remaining nodes attached to gateway: ' + owners);
 
     } else {
         ownerNode.warn('Trying to close unknown gateway');
