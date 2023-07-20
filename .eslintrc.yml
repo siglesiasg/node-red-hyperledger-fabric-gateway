@@ -1,5 +1,5 @@
 env:
-  browser: true
+  browser: false
   es2021: true
 extends:
   - eslint:recommended
@@ -36,7 +36,7 @@ rules:
   no-tabs: error
   no-trailing-spaces: error
   # no-use-before-define: error
-  "@typescript-eslint/no-explicit-any": off
+  "@typescript-eslint/no-explicit-any": warn
   no-useless-call: error
   no-with: error
   operator-linebreak: error

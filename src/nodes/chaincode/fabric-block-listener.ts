@@ -90,8 +90,13 @@ export = (RED: NodeAPI): void => {
                 }
 
             } catch (error: any) {
-
-                node.status({ fill: 'red', shape: 'dot', text: error });
+                if (error.message && error.message.includes('1 CANCELLED: Cancelled on client')) {
+                    node.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
+                } else if (error.message && error.message.includes('response: 404')) {
+                    node.status({ fill: 'red', shape: 'dot', text: 'Error getting block. Not found. Is checkpoint ok?' });
+                } else {
+                    node.status({ fill: 'grey', shape: 'dot', text: error });
+                }
 
             } finally {
                 const blockIterable = getSharedData(RED, node.id, 'blockIterable') as CloseableAsyncIterable<Block>;
@@ -149,12 +154,6 @@ export = (RED: NodeAPI): void => {
 
                         node.status({ fill: 'green', shape: 'dot', text: 'Waiting for next block: ' + (blockData.blockNumber + 1) });
                     }
-                } catch (error: any) {
-                    if (error.message && error.message.includes('1 CANCELLED: Cancelled on client')) {
-                        node.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
-                    } else {
-                        node.status({ fill: 'red', shape: 'dot', text: error });
-                    }
 
                 } finally {
                     if (blockIterable) {
@@ -203,12 +202,6 @@ export = (RED: NodeAPI): void => {
                         }
 
                         node.status({ fill: 'green', shape: 'dot', text: 'Waiting for next block: ' + (blockData.blockNumber + 1) });
-                    }
-                } catch (error: any) {
-                    if (error.message && error.message.includes('1 CANCELLED: Cancelled on client')) {
-                        node.status({ fill: 'grey', shape: 'dot', text: 'Closed' });
-                    } else {
-                        node.status({ fill: 'red', shape: 'dot', text: error });
                     }
 
                 } finally {
