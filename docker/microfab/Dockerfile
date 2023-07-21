@@ -7,12 +7,11 @@ RUN rm -f /etc/yum.repos.d/bintray-apache-couchdb-rpm.repo
 RUN microdnf install dos2unix
 
 WORKDIR /home/ibp-user
-# RUN mkdir fabcar-chaincode-go-main
 
 COPY ./install.sh /home/ibp-user/install.sh
 COPY ./docker-entrypoint.sh /home/ibp-user/docker-entrypoint.sh
 COPY ./fabric-config.json /home/ibp-user/fabric-config.json
-COPY ./fabcar-chaincode-go-main /home/ibp-user/fabcar-chaincode-go-main
+COPY ./chaincode-source /home/ibp-user/chaincode-source
 
 RUN dos2unix /home/ibp-user/*.sh
 

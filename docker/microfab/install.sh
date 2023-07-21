@@ -50,8 +50,13 @@ export FABRIC_CFG_PATH="/opt/microfab/data/peer-nodered-test/config"
 export CC_NAME="fabcar"
 export CC_VERSION="0.0.0"
 
-println "Package"
-peer lifecycle chaincode package fabcarcc.tgz --path /home/ibp-user/fabcar-chaincode-go-main --lang golang --label fabcar >&logPackage.txt
+println "Package Npm Install"
+cd chaincode-source 
+npm install
+npm run build
+cd ..
+println "Package Peer"
+peer lifecycle chaincode package fabcarcc.tgz --path /home/ibp-user/chaincode-source --lang node --label fabcar >&logPackage.txt
 res=$?
 { set +x; } 2>/dev/null
 cat logPackage.txt
@@ -103,7 +108,7 @@ verifyResult $res "Chaincode definition commit failed"
 println "Chaincode definition commited"
 
 println "Invoke fabcar init"
-peer chaincode invoke -o orderer-api.127-0-0-1.nip.io:9999 --channelID nodered-test -n ${CC_NAME} -c '{"function":"initLedger","Args":[]}'
+peer chaincode invoke -o orderer-api.127-0-0-1.nip.io:9999 --channelID nodered-test -n ${CC_NAME} -c '{"function":"InitLedger","Args":[]}'
 
 sleep 5
 

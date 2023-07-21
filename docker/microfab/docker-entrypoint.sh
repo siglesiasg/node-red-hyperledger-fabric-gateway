@@ -29,7 +29,7 @@ sleep infinity
 
 
 # Package
-peer lifecycle chaincode package fabcarcc.tgz --path /home/ibp-user/fabcar-chaincode-go-main --lang golang --label fabcar
+peer lifecycle chaincode package fabcarcc.tgz --path /home/ibp-user/chaincode-source --lang golang --label fabcar
 
 # Install
 
