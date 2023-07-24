@@ -34,27 +34,15 @@
             var that = this;
             this.editor = RED.editor.createEditor({
                 id : 'node-input-args-editor',
-                mode : 'application/json',
+                mode: 'monaco/mode/json',
                 value : $('#node-input-args').val()
-            });
-            RED.library.create({
-                url : 'functions', // where to get the data from
-                type : 'function', // the type of object the library is for
-                editor : that.editor, // the field name the main text body goes to
-                fields : ['name', 'outputs']
             });
             this.editor.focus();
 
             this.editorTransient = RED.editor.createEditor({
                 id : 'node-input-transientData-editor',
-                mode : 'application/json',
+                mode: 'monaco/mode/json',
                 value : $('#node-input-transientData').val()
-            });
-            RED.library.create({
-                url : 'functions', // where to get the data from
-                type : 'function', // the type of object the library is for
-                editor : that.editorTransient, // the field name the main text body goes to
-                fields : ['name', 'outputs']
             });
             this.editor.focus();
         },

@@ -30,10 +30,14 @@ export async function newIdentity(connectionConfig: ConnectionConfigModel): Prom
   let privateKey;
   if (connectionConfig.identity.certType === 'embeded') {
 
-    credentials = Buffer.from(Buffer.from(connectionConfig.identity.cert, 'base64').toString('utf8'), 'utf8');
+    try {
+      credentials = Buffer.from(Buffer.from(connectionConfig.identity.cert, 'base64').toString('utf8'), 'utf8');
 
-    const privateKeyPem = Buffer.from(connectionConfig.identity.privateKey, 'base64').toString('utf8');
-    privateKey = crypto.createPrivateKey(privateKeyPem);
+      const privateKeyPem = Buffer.from(connectionConfig.identity.privateKey, 'base64').toString('utf8');
+      privateKey = crypto.createPrivateKey(privateKeyPem);
+    } catch (err) {
+      throw new Error(`Unable to build identity from embeded cert. Are certs in base64?. ${err}`);
+    }
 
   } else if (connectionConfig.identity.certType === 'files') {
 
@@ -201,20 +205,23 @@ function getTransactionData(configArgs: string, configTransient: string, payload
 
   function getTransactionArg() {
     let transactionArgs;
+
     if (payload?.transaction?.args) {
       transactionArgs = payload.transaction.args;
-
+    } else if (payload?.transaction) {
+      transactionArgs = payload.transaction;
     } else if (configArgs) {
       try {
         transactionArgs = JSON.parse(configArgs);
       } catch (e) {
-        throw new Error('Configuration Args is not an array!');
+        throw new Error('Configuration Args is not an array! Check config');
       }
-
+    } else {
+      transactionArgs = payload;
     }
 
     if (transactionArgs && !Array.isArray(transactionArgs)) {
-      throw new Error('Configuration Args is not an array!');
+      throw new Error('Configuration Args is not an array!. Check payload config.');
     }
 
     return transactionArgs;
@@ -222,18 +229,19 @@ function getTransactionData(configArgs: string, configTransient: string, payload
 
   function getTransactionTransient() {
     let transientData;
+
     if (payload?.transaction?.transient) {
       transientData = payload.transaction.transient;
     } else if (configTransient) {
       try {
         transientData = JSON.parse(configTransient);
       } catch (e) {
-        throw new Error('Transient args is not an array! ' + configTransient);
+        throw new Error('Transient args is not an object! Check config');
       }
     }
 
     if (transientData && !Array.isArray(transientData)) {
-      throw new Error('Transient args is not an array');
+      throw new Error('Transient args is not an array. Check payload.transaction.transient');
     }
 
     return transientData;

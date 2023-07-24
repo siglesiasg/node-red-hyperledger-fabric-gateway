@@ -4,6 +4,7 @@ import { buildGenericDecoder } from './../../libs/fabric-decoder';
 import { closeConnection } from './../../libs/fabric-functions';
 import { buildConnectionConfig } from './../../models/connection-config.model';
 import { FabricCCEvaluateDef } from './fabric-cc-evaluate.def';
+import { handleError } from './../../libs/fabric-error-handler';
 
 export = (RED: NodeAPI): void => {
 
@@ -32,8 +33,7 @@ export = (RED: NodeAPI): void => {
         done();
 
       } catch (error: any) {
-        this.status({ fill: 'red', shape: 'dot', text: error });
-        done(error);
+        handleError(this, done, error);
       }
 
     });

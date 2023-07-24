@@ -1,4 +1,4 @@
-import { ConnectionNodeDef } from '../connection-config-node.def';
+import { NodeDef } from 'node-red';
 
-export interface FabricBlockListenerCommitDef extends ConnectionNodeDef {
+export interface FabricBlockListenerCommitDef extends NodeDef {
 }

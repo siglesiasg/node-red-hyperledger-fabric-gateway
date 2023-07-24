@@ -1,6 +1,7 @@
 import { Node, NodeAPI, NodeMessageInFlow } from 'node-red';
 import { invokeChaincode } from '../../libs/fabric-functions';
 import { buildGenericDecoder } from './../../libs/fabric-decoder';
+import { handleError } from './../../libs/fabric-error-handler';
 import { closeConnection } from './../../libs/fabric-functions';
 import { buildConnectionConfig } from './../../models/connection-config.model';
 import { FabricCCSubmitDef } from './fabric-cc-submit.def';
@@ -32,8 +33,7 @@ export = (RED: NodeAPI): void => {
         done();
 
       } catch (error: any) {
-        this.status({ fill: 'red', shape: 'dot', text: error });
-        done(error);
+        handleError(this, done, error);
       }
 
     });

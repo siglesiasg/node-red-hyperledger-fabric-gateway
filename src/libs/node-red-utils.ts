@@ -31,7 +31,11 @@ export function addConfiguration(node: Node, config: NodeDef) {
   if (!nodeAny.internalConfig) {
     nodeAny.internalConfig = {};
   }
+  // if (!nodeAny.internalCredentials) {
+  //   nodeAny.internalCredentials = {};
+  // }
   nodeAny.internalConfig = config;
+  // nodeAny.internalCredentials = node.credentials;
   node.debug(`Updating data of ${node.name?node.name:'nodeId[' + node.id + ']'}`);
 }
 

@@ -3,25 +3,27 @@
     RED.nodes.registerType('fabric-identity', {
         category: 'config',
         defaults: {
-            name:           {value: '' },                   // Display Name
+            name:           {value: '', required: true },
+
             mspIdSelector:  {value: '', required: true, type: 'fabric-mspid'},
             certType:       {value: 'embeded', required: true},
-            // embeded
-            cert:           {value: '', required: false},
-            privateKey:     {value: '', required: false},
-            ca:             {value: '', required: true},
 
             // file
             certPath:       {value: '', required: false},
             privateKeyPath: {value: '', required: false},
             
             // microfab
-            microfabUrl:    {value: 'http://client.127-0-0-1.nip.io:9999', required: false},
+            microfabUrl:    {value: 'http://client.127-0-0-1.nip.io:8080', required: false},
             microfabId:     {value: '', required: false},
+        },
+        credentials: {
+            // embeded
+            cert:           {type:"text"},
+            privateKey:     {type:"text"},
         },
 
         label : function () {
-            return this.name?this.name:this.identityId;
+            return this.name;
         },
         oneditprepare: function() {
 
@@ -38,11 +40,6 @@
             $("#node-config-input-privateKey").on("change", function() {
                 $(".form-row-tip-openIdentityFileError").hide();
                 $("#node-config-input-file").val('');
-            }),
-
-            $("#node-config-input-ca").on("change", function() {
-                $(".form-row-tip-openIdentityFileError").hide();
-                $("#node-config-input-file").val(''); 
             }),
 
             $("#node-config-input-certType").on("change", function() {
@@ -101,11 +98,6 @@
                         } else {
                             throw new Error("Invalid JSON file. Missing 'privateKey' property.");
                         }
-                        if (jsonData.hasOwnProperty('ca')) {
-                            $("#node-config-input-ca").val(jsonData.ca);
-                        } else {
-                            throw new Error("Invalid JSON file. Missing 'ca' property.");
-                        }
 
                     } catch (error) {
                         $(".form-row-tip-openIdentityFileError").show();
@@ -127,6 +119,11 @@
         <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
         <input type="text" id="node-config-input-name" data-i18n="[placeholder]node-red:common.label.name">
     </div>
+    
+    <div class="form-row">
+        <label for="node-config-input-mspIdSelector"><i class="fa"></i>Msp Id</label>
+        <input type="text" id="node-config-input-mspIdSelector" placeholder=""/>
+    </div>
 
     <div class="form-row">
         <label for="node-config-input-certType"><i class="fa fa-tasks"></i><span> Cert Type</span></label>
@@ -136,12 +133,7 @@
             <option value="microfab">Microfab</option>
         </select>
     </div>    
-
-    <div class="form-row">
-        <label for="node-config-input-mspIdSelector"><i class="fa"></i>Msp Id</label>
-        <input type="text" id="node-config-input-mspIdSelector" placeholder=""/>
-    </div>
-
+    
     <!-- Embeded -->
     <div class="form-row form-row-cert hide">
         <label for="node-config-input-cert"><i class="fa"></i>Cert</label>
@@ -153,11 +145,6 @@
         <input type="text" id="node-config-input-privateKey" placeholder="LS0tLS1..."/>
     </div>
 
-    <div class="form-row form-row-ca">
-        <label for="node-config-input-ca"><i class="fa"></i>Ca</label>
-        <input type="text" id="node-config-input-ca" placeholder="LS0tLS1..."/>
-    </div>
-    
     <!-- File -->
     <div class="form-row form-row-certPath hide">
         <label for="node-config-input-certPath"><i class="fa"></i>Cert Path</label>

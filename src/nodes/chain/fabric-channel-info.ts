@@ -4,6 +4,7 @@ import { buildConnectionConfig } from '../../models/connection-config.model';
 import { buildChannelInfoDecoder } from './../../libs/fabric-decoder';
 import { closeConnection, invokeChaincodeGeneric } from './../../libs/fabric-functions';
 import { FabricChannelInfoDef } from './fabric-channel-info.def';
+import { handleError } from './../../libs/fabric-error-handler';
 
 export = (RED: NodeAPI): void => {
 
@@ -33,8 +34,7 @@ export = (RED: NodeAPI): void => {
         done();
 
       } catch (error: any) {
-        this.status({ fill: 'red', shape: 'dot', text: error });
-        done(error);
+        handleError(this, done, error);
       }
 
     });

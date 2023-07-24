@@ -17,7 +17,6 @@ export = (RED: NodeAPI): void => {
   function fabricBlockListenerNode(this: Node<FabricBlockListenerDef>, config: FabricBlockListenerDef) {
 
     RED.nodes.createNode(this, config); // First line always!
-
     const connection = buildConnectionConfig(RED, config);
 
     try {

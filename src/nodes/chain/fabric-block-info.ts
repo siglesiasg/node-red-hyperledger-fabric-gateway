@@ -4,6 +4,7 @@ import { getConfigValidate } from '../../libs/node-red-utils';
 import { buildConnectionConfig } from '../../models/connection-config.model';
 import { buildBlockDecoder } from './../../libs/fabric-decoder';
 import { FabricBlockInfoDef } from './fabric-block-info.def';
+import { handleError } from './../../libs/fabric-error-handler';
 
 export = (RED: NodeAPI): void => {
 
@@ -52,8 +53,7 @@ export = (RED: NodeAPI): void => {
         done();
 
       } catch (error: any) {
-        this.status({ fill: 'red', shape: 'dot', text: error });
-        done(error);
+        handleError(this, done, error);
       }
 
     });

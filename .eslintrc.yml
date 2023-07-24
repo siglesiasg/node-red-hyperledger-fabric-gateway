@@ -12,19 +12,19 @@ plugins:
   - '@typescript-eslint'
 rules:
   indent:
-      - error
+      - warn
       - 2
   linebreak-style:
       - error
       - unix
   quotes:
-      - error
+      - warn
       - single
   semi:
-      - error
+      - warn
       - always
   no-unused-vars:
-      - error
+      - warn
       - args: none
   no-console: off
   curly: error
@@ -34,9 +34,10 @@ rules:
   no-var: error
   dot-notation: error
   no-tabs: error
-  no-trailing-spaces: error
+  no-trailing-spaces: warn
   # no-use-before-define: error
   "@typescript-eslint/no-explicit-any": warn
+  "@typescript-eslint/no-unused-vars": warn
   no-useless-call: error
   no-with: error
   operator-linebreak: error

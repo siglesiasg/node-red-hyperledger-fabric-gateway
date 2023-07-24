@@ -28,7 +28,6 @@ export interface IdentityConfigModel {
     certType: string;
     cert?: string;
     privateKey?: string;
-    ca: string;
 
     certPath?: string;
     privateKeyPath?: string;
@@ -95,7 +94,6 @@ function buildIdentity(RED: NodeAPI, fabricIdentityDef: FabricIdentityDef): Iden
 
     cert: fabricIdentityDef.cert,
     privateKey: fabricIdentityDef.privateKey,
-    ca: fabricIdentityDef.ca,
 
     certPath: fabricIdentityDef.certPath,
     privateKeyPath: fabricIdentityDef.privateKeyPath,
