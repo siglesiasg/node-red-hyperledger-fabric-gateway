@@ -1,5 +1,5 @@
 import { Block } from '@hyperledger/fabric-protos/lib/common';
-import { NamespaceReadWriteSetProtos, TransactionProtos, parseBlock } from '../../../libs/fabric-parse-block';
+import { NamespaceReadWriteSetProtos, TransactionProtos, parseBlock } from '../libs/fabric-parse-block';
 
 const utf8Decoder = new TextDecoder();
 

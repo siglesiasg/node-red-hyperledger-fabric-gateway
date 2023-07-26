@@ -4,7 +4,7 @@ import { Block } from '@hyperledger/fabric-protos/lib/common';
 import { Node, NodeAPI, NodeMessageInFlow } from 'node-red';
 import { getGateway } from '../../libs/fabric-connection-pool';
 import { addConfiguration, addEventToPayload, addSharedData, getConfigValidate, getSharedData } from '../../libs/node-red-utils';
-import { buildBlockEventModel } from '../chain/models/block.model';
+import { buildBlockEventModel } from '../../models/block.model';
 import { closeConnection } from './../../libs/fabric-functions';
 import { buildConnectionConfig } from './../../models/connection-config.model';
 import { FabricChannelDef } from './../config/fabric-channel.def';
