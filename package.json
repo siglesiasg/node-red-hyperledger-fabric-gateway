@@ -11,9 +11,9 @@
         "start": "npm run cpy-res && node --inspect node_modules/node-red/red.js -u ./local-env --safe",
         "clean": "rimraf dist",
         "build": "npm run clean && npm run cpy-res && tsc",
-        "cpy-res": "npm run cpy-res-config && npm run cpy-res-chain && npm run cpy-res-chaincode",
+        "cpy-res": "npm run cpy-res-config && npm run cpy-res-channel && npm run cpy-res-chaincode",
         "cpy-res-config": "cpy ./src/nodes/config/*.html ./dist/nodes/config",
-        "cpy-res-chain": "cpy ./src/nodes/chain/*.html ./dist/nodes/chain && cpy ./src/nodes/chain/icons/* ./dist/nodes/chain/icons/",
+        "cpy-res-channel": "cpy ./src/nodes/channel/*.html ./dist/nodes/channel && cpy ./src/nodes/channel/icons/* ./dist/channel/chain/icons/",
         "cpy-res-chaincode": "cpy ./src/nodes/chaincode/*.html ./dist/nodes/chaincode && cpy ./src/nodes/chaincode/icons/* ./dist/nodes/chaincode/icons/",
         "lint": "eslint .",
         "lint-fix": "eslint --fix ."
