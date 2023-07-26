@@ -93,10 +93,16 @@ export async function buildGatewayConnection(grpcClient: GrpcClient, connectionC
   return connect(options);
 }
 
-export function getTransactionName(configTransaction: string, payload: { transactionName?: string; }) {
+export function getTransactionName(
+  configTransaction: string,
+  payload: { transactionName?: string } | { transaction: { name: string} },
+) {
+  const payAsAny = payload as any;
   let transactionName;
-  if (payload && payload.transactionName) {
-    transactionName = payload.transactionName;
+  if (payAsAny && payAsAny.transactionName) {
+    transactionName = payAsAny.transactionName;
+  } else if (payAsAny && payAsAny.transaction?.name) {
+    transactionName = payAsAny.transaction?.name;
   } else {
     transactionName = configTransaction;
   }
@@ -196,7 +202,11 @@ async function invokeChaincodeInternal(
   addResultToPayload(RED, msg, transactionName, proposal, decoder(getResult));
 }
 
-function getTransactionData(configArgs: string, configTransient: string, payload: { transaction?: { args?: string[], transient?: string[] }}): ProposalOptions {
+function getTransactionData(
+  configArgs: string,
+  configTransient: string,
+  payload: { transaction?: { args?: string[], transient?: string[] }}
+): ProposalOptions {
 
   return {
     arguments: getTransactionArg(),

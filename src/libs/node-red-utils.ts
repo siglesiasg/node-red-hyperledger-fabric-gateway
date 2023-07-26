@@ -69,30 +69,34 @@ export function addEventToPayload(RED: NodeAPI, msg: NodeMessageInFlow, decodedR
   RED.util.setMessageProperty(msg, 'payload', data, true);
 }
 
-export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, transactionName: string, transactionArgs: string[] | ProposalOptions, decodedResult: string) {
+export function addResultToPayload(RED: NodeAPI, msg: NodeMessageInFlow, name: string, transactionArgs: string[] | ProposalOptions, decodedResult: string) {
 
-  let data;
+  let transaction;
   if (!transactionArgs) {
-    data = undefined;
+    transaction = {
+      name,
+    };
   } else if (Array.isArray(transactionArgs)) {
-    data = {
+    transaction = {
+      name,
       args: transactionArgs
     };
   } else {
-    data = {
+    transaction = {
+      name,
       args: (transactionArgs as ProposalOptions).arguments,
       transient: (transactionArgs as ProposalOptions).transientData,
     };
   }
 
   const payloadData = {
-    query: {
-      transactionName,
-      transaction: data
-    },
+    transaction,
     result: decodedResult?JSON.parse(decodedResult):undefined
   };
 
+  if (!payloadData.result) { delete payloadData.result; }
+  if (!payloadData.transaction.args) { delete payloadData.transaction.args; }
+  if (!payloadData.transaction.transient) { delete payloadData.transaction.transient; }
 
   RED.util.setMessageProperty(msg, 'payload', payloadData, true);
 }
