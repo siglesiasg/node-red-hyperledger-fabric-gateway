@@ -68,8 +68,8 @@
             "fabric-cc-generic": "./dist/nodes/chaincode/fabric-cc-generic.js",
             "fabric-cc-evaluate": "./dist/nodes/chaincode/fabric-cc-evaluate.js",
             "fabric-cc-submit": "./dist/nodes/chaincode/fabric-cc-submit.js",
-            "fabric-block-info": "./dist/nodes/chain/fabric-block-info.js",
-            "fabric-channel-info": "./dist/nodes/chain/fabric-channel-info.js"
+            "fabric-block-info": "./dist/nodes/channel/fabric-block-info.js",
+            "fabric-channel-info": "./dist/nodes/channel/fabric-channel-info.js"
         }
     }
 }
