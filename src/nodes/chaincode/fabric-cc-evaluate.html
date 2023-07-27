@@ -11,14 +11,20 @@
             contractSelector:       { value: '', required: true, type: 'fabric-contract' },
             transaction:            { value: '', required: false },
             args:                   { value: '', required: false, validate: function(args, opt) {
-                if (!args) { return true; }
-                if (Array.isArray(JSON.parse(args))) { return true; }
+                try {
+                    if (!args) { $(".form-row-tip-argsError").hide(); return true; }
+                    if (Array.isArray(JSON.parse(args))) { $(".form-row-tip-argsError").hide(); return true; }
+                } catch (error) {}
+                $(".form-row-tip-argsError").show();
                 return 'Args must be an array of strings';
             }},
             transientData:          { value: '', required: false, validate: function(args, opt) {
-                if (!args) { return true; }
-                if (Array.isArray(JSON.parse(args))) { return true; }
-                return 'Args must be an array of strings';
+                try {
+                    if (!args) { $(".form-row-tip-transientError").hide(); return true; }
+                    if (Array.isArray(JSON.parse(args))) { $(".form-row-tip-transientError").hide(); return true; }
+                } catch (error) {}
+                $(".form-row-tip-transientError").show();
+                return 'Transient must be an array of strings';
             }},
         },
         inputs: 1,
@@ -43,7 +49,7 @@
                 mode: 'monaco/mode/json',
                 value : $('#node-input-transientData').val()
             });
-            this.editor.focus();
+            this.editorTransient.focus();
         },
 
         oneditsave : function () {
@@ -112,6 +118,10 @@
         </div>
     </div>
 
+    <div class="form-row form-row-tip-argsError hide">
+        <div class="form-tips"><span>Args must be an array: ["arg1","arg2"]'</span></div>
+    </div>    
+
     <div class="form-row">
         <div id="node-input-transientData-outer">
             <div class="form-row" style="margin-bottom: 0px;">
@@ -124,11 +134,34 @@
         </div>
     </div>    
 
+    <div class="form-row form-row-tip-transientError hide">
+        <div class="form-tips"><span>Transient must be an array: ["tra1","tra2"]'</span></div>
+    </div>      
+
 </script>
 
 <script type="text/html" data-help-name="fabric-cc-evaluate">
-    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
-    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
-    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
-    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+    <span class="red-ui-text-bidi-aware">
+        <h2>Hyperledger Fabric Evaluate Node</h2>
+        <p>Evaluate a transaction function and return its results. A transaction proposal will be evaluated on endorsing peers but the transaction will not be sent to the ordering service and so will not be committed to the ledger. This can be used for querying the world state.</p>
+        <h3 class="red-ui-help-info-header">Details</h3>
+        <p>Basic connection config nodes must be provided: <code>Gateway</code>, <code>Identity</code>, <code>Channel</code> and <code>Contract</code> </p>
+        <p>Transaction config can be statically set in the node: <code>Transaction (Name)</code>, <code>Args Array</code> and <code>Transient Data Array</code> or if a payload with the following format is supplied, the static transaction config fields will be overwritten making node dinamically configured</p>
+        <p><code>Args Array</code> and <code>Transient Data Array</code> must be an array of strings</p>
+        <h3 class="red-ui-help-info-header">Input payload</h3>
+        <dl class="message-properties">
+            <dt class="optional">payload<span class="property-type">string[]</span></dt>
+            <dd>if configured as an array it will be used to invoke the chaincode with these arguments.</dd>
+            <dt class="optional">payload.transaction<span class="property-type">string[]</span></dt>
+            <dd>if configured as an array it will be used to invoke the chaincode with these arguments.</dd>
+            <dt class="optional">payload.transactionName <span class="property-type">string</span></dt>
+            <dd>if configured, this transaction will be invoked from the chaincode.</dd>
+            <dt class="optional">payload.transaction.name <span class="property-type">string</span></dt>
+            <dd>if configured, this transaction will be invoked from the chaincode.</dd>
+            <dt class="optional">payload.transaction.args<span class="property-type">string[]</span></dt>
+            <dd>if configured as an array it will be used to invoke the chaincode with these arguments.</dd>
+            <dt class="optional">payload.transaction.transient<span class="property-type">string[]</span></dt>
+            <dd>if configured as an array it will be used to invoke the chaincode with this transient data.</dd>
+        </dl>
+    </span>
 </script>
