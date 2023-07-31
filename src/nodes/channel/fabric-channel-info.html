@@ -46,8 +46,10 @@
 </script>
 
 <script type="text/html" data-help-name="fabric-channel-info">
-    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
-    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
-    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
-    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+    <span class="red-ui-text-bidi-aware">
+        <h2>Hyperledger Fabric Channel Info</h2>
+        <p>Query the ledger and return the channel height and last block hash</p>
+        <h3 class="red-ui-help-info-header">Details</h3>
+        <p>Basic connection config nodes must be provided: <code>Gateway</code>, <code>Identity</code> and <code>Channel</code> </p>
+    </span>
 </script>

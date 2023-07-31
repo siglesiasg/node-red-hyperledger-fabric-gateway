@@ -62,8 +62,14 @@
 </script>
 
 <script type="text/html" data-help-name="fabric-block-listener">
-    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
-    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
-    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
-    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+    <span class="red-ui-text-bidi-aware">
+        <h2>Hyperledger Fabric Block Listener</h2>
+        <p>Create a request to receive block events.</p>
+        <h3 class="red-ui-help-info-header">Details</h3>
+        <p>A message generated from this node must end in a <code>Hyperledger Fabric Block Listener Commit</code> node in order to mark that block (and transaction) as commited. Every message have <code>_lockSession</code> field value in order to match origin <code>Hyperledger Fabric Block Listener</code> node and perform commit operation over that node checkpoint file.</p>
+        <p>Is built in "multi-message proof" mode so that if messages with delays or duplicates of already committed blocks arrive, they will be ignored and the highest block (and transaction) will be kept.</p>
+        <p>Basic connection config nodes must be provided: <code>Gateway</code>, <code>Identity</code> and <code>Channel</code></p>
+        <p>This node also require a path to a file <code>Checkpointer Filename</code> that keeps the current block (and transaction) already processed so everytime this node starts will continue to read blocks (and transactions) from the last processed one.</p>
+        <p><code>Send Transactions</code> will make this node works at transaction level emiting a message for every transaction of the block. Otherwise only a message for every block will be emited</p>
+    </span>
 </script>

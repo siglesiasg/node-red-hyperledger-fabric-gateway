@@ -5,11 +5,11 @@
         paletteLabel: 'get block',
         defaults: {
             name:                   { value: '' },
-            method:                 { value:"number", required:true},
             gatewaySelector:        { value: '', required: true, type: 'fabric-gateway'  },
             identitySelector:       { value: '', required: true, type: 'fabric-identity' },
             channelSelector:        { value: '', required: true, type: 'fabric-channel'  },
-            blockNumber:            { value: '', required: false  },
+            method:                 { value:"number", required:true},
+            blockNumber:            { value: '', required: false, validate:RED.validators.number()  },
             blockHash:              { value: '', required: false  },
             txId:                   { value: '', required: false  },
         },
@@ -65,7 +65,7 @@
     </div>
 
     <div class="form-row">
-        <label for="node-input-method"><i class="fa fa-tasks"></i> <span> Method</span></label>
+        <label for="node-input-method"><i class="fa"></i>Method</label>
         <select type="text" id="node-input-method" style="width:70%;">
             <option value="number">Number</option>
             <option value="hash">Hash</option>
@@ -91,8 +91,15 @@
 </script>
 
 <script type="text/html" data-help-name="fabric-block-info">
-    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
-    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
-    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
-    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+    <span class="red-ui-text-bidi-aware">
+        <h2>Hyperledger Fabric Block Info</h2>
+        <p>Query the ledger and return the block that match selected conditions</p>
+        <h3 class="red-ui-help-info-header">Details</h3>
+        <p>Basic connection config nodes must be provided: <code>Gateway</code>, <code>Identity</code> and <code>Channel</code> </p>
+        <p>Select the <code>Method</code> to choose operation from options</p>
+        <p> - <code>Number</code> will recover a block by it's number. Must be a number</p>
+        <p> - <code>Hash</code> will recover a block by it's hash</p>
+        <p> - <code>TxId</code> will recover a block by any of it's transaction id</p>
+        <p><code>Args Array</code> and <code>Transient Data Array</code> must be an array of strings</p>
+    </span>
 </script>

@@ -30,8 +30,16 @@
 </script>
 
 <script type="text/html" data-help-name="fabric-block-listener-commit">
-    <p>Hyperledger Fabric output node. Submit or evaluate transactions</p>
-    <p>The name of the transaction should be set like <code>msg.payload.transactionName</code></p>
-    <p>The arguments for the transaction should be set like <code>msg.payload.transactionArgs</code>. The arguments should be an array of strings</p>
-    <p>For example <code>{"transactionName: "myTransaction", "transactionArgs": ["arg1", "arg2"]}</code></p>
+    <span class="red-ui-text-bidi-aware">
+        <h2>Hyperledger Fabric Block Listener Commit</h2>
+        <p>Will commit already processed block (and transaction) messages emitted from a <code>Hyperledger Fabric Block Listener</code> origin node</p>
+        <h3 class="red-ui-help-info-header">Details</h3>
+        <p>Every message that arrives to this node must have a <code>_lockSession</code> field value in order to match origin <code>Hyperledger Fabric Block Listener</code> node to perform commit operation over that node checkpoint file.</p>
+        <p>Is built in "multi-message proof" mode so that if messages with delays or duplicates of already committed blocks arrive, they will be ignored and the highest block (and transaction) will be kept. Multiple <code>Hyperledger Fabric Block Listener</code> nodes can use a single <code>Hyperledger Fabric Block Listener Commit</code>.</p>
+        <h3 class="red-ui-help-info-header">Input payload</h3>
+        <dl class="message-properties">
+            <dt class="mandatory">_lockSession<span class="property-type">string</span></dt>
+            <dd>a lock session id generated in a <code>Hyperledger Fabric Block Listener</code> node to perform commit operation</dd>
+        </dl>        
+    </span>
 </script>
