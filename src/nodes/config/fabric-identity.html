@@ -9,6 +9,8 @@
             certType:       {value: 'embeded', required: true},
 
             // file
+            isFabricOpType: {value: 'true', required: false},
+            fabricOpIdPath: {value: '', required: false},
             certPath:       {value: '', required: false},
             privateKeyPath: {value: '', required: false},
             
@@ -42,6 +44,19 @@
                 $("#node-config-input-file").val('');
             }),
 
+            $("#node-config-input-isFabricOpType").on("change", function() {
+                $(".form-row-fabricOpIdPath").hide(); $("#node-config-input-fabricOpIdPath").prop('required', false);
+                $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
+                $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
+
+                if ($(this).val() === "true") {
+                    $(".form-row-fabricOpIdPath").show(); $("#node-config-input-fabricOpIdPath").prop('required', true);
+                } else if ($(this).val() === "false") {
+                    $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
+                    $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
+                }
+            }),
+
             $("#node-config-input-certType").on("change", function() {
                 
                 // Embeded
@@ -49,6 +64,8 @@
                 $(".form-row-privateKey").hide(); $("#node-config-input-privateKey").prop('required', false);
 
                 // Files
+                $(".form-row-isFabricOpType").hide(); $("#node-config-input-isFabricOpType").prop('required', false);
+                $(".form-row-fabricOpIdPath").hide(); $("#node-config-input-fabricOpIdPath").prop('required', false);
                 $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
                 $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
                 $(".form-row-openIdentityFile").hide();
@@ -60,15 +77,25 @@
                 $(".form-row-microfabUrl").hide(); $("#node-config-input-microfabUrl").prop('required', false);
                 $(".form-row-microfabId").hide(); $("#node-config-input-microfabId").prop('required', false);
 
-                if ($(this).val() === "embeded") {
+                if ($(this).val() === "embeded") { // Embeded
                     $(".form-row-cert").show(); $("#node-config-input-cert").prop('required', true);
                     $(".form-row-privateKey").show(); $("#node-config-input-privateKey").prop('required', true);
                     $(".form-row-openIdentityFile").show();
                     $(".form-row-tip-openIdentityFile").show();
-                } else if ($(this).val() === "files") {
-                    $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
-                    $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
-                } else {
+                } else if ($(this).val() === "files") { // Files
+
+                    $(".form-row-isFabricOpType").show(); $("#node-config-input-isFabricOpType").prop('required', true);
+
+                    $(".form-row-fabricOpIdPath").hide(); $("#node-config-input-fabricOpIdPath").prop('required', false);
+                    $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
+                    $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
+                    if ($("#node-config-input-isFabricOpType").val() === "true") {
+                        $(".form-row-fabricOpIdPath").show(); $("#node-config-input-fabricOpIdPath").prop('required', true);
+                    } else if ($("#node-config-input-isFabricOpType").val() === "false") {
+                        $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
+                        $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
+                    }
+                } else { // Microfab
                     $(".form-row-microfabUrl").show(); $("#node-config-input-microfabUrl").prop('required', true);
                     $(".form-row-microfabId").show(); $("#node-config-input-microfabId").prop('required', true);
                 }
@@ -126,7 +153,7 @@
     </div>
 
     <div class="form-row">
-        <label for="node-config-input-certType"><i class="fa fa-tasks"></i><span> Cert Type</span></label>
+        <label for="node-config-input-certType"><i class="fa"></i>Cert Type</label>
         <select type="select" id="node-config-input-certType" style="width:70%;">
             <option value="embeded">Embeded</option>
             <option value="files">Filesystem</option>
@@ -145,7 +172,32 @@
         <input type="text" id="node-config-input-privateKey" placeholder="LS0tLS1..."/>
     </div>
 
-    <!-- File -->
+    <!-- Helper file reader -->
+    <div class="form-tips form-row-tip-openIdentityFile hide"><span>Tip: Open a Fabric Operations Console identity file to autofill form</span></div>
+    
+    <div class="form-row form-row-openIdentityFile hide">
+        <label for="node-config-input-file"><i class="fa"></i>Identity File</label>
+        <input type="file" id="node-config-input-file" accept=".json">
+    </div>
+    
+    <div class="form-tips form-row-tip-openIdentityFileError hide"><span>Error loading file</span></div>
+
+    <!-- File type selector-->
+    <div class="form-row form-row-isFabricOpType hide">
+        <label for="node-config-input-isFabricOpType"><i class="fa"></i>File type</label>
+        <select id="node-config-input-isFabricOpType" style="width: 70%;">
+            <option value="true">Legacy Key/Cert Identity</option>
+            <option value="false">Fabric Operations Console Identity</option>
+        </select>
+    </div>
+
+    <!--Fabric Operations Console Identity -->
+    <div class="form-row form-row-fabricOpIdPath hide">
+        <label for="node-config-input-fabricOpIdPath"><i class="fa"></i>Fabric Operations Identity Path</label>
+        <input type="text" id="node-config-input-fabricOpIdPath" placeholder=""/>
+    </div>
+
+    <!-- Path Legacy Key/Cert -->
     <div class="form-row form-row-certPath hide">
         <label for="node-config-input-certPath"><i class="fa"></i>Cert Path</label>
         <input type="text" id="node-config-input-certPath" placeholder=""/>
@@ -155,15 +207,6 @@
         <label for="node-config-input-privateKeyPath"><i class="fa"></i>Private Key Path</label>
         <input type="text" id="node-config-input-privateKeyPath" placeholder=""/>
     </div>
-
-    <div class="form-tips form-row-tip-openIdentityFile hide"><span>Tip: Open a Fabric Operations Console identity file to autofill form</span></div>
-    
-    <div class="form-row form-row-openIdentityFile hide">
-        <label for="node-config-input-file"><i class="fa"></i>Identity File</label>
-        <input type="file" id="node-config-input-file" accept=".json">
-    </div>
-    
-    <div class="form-tips form-row-tip-openIdentityFileError hide"><span>Error loading file</span></div>
 
     <!-- Microfab -->
     <div class="form-row form-row-microfabUrl hide">
@@ -179,7 +222,16 @@
 </script>
 
 <script type="text/html" data-help-name="fabric-identity">
-  <p>Hyperledger Fabric identity node. Provides the configuration for the Hyperledger Fabric nodes</p>
+    <span class="red-ui-text-bidi-aware">
+        <h2>Hyperledger Fabric Identity Config</h2>
+        <p>Configuration node to create a Hyperledger identity</p>
+        <h3 class="red-ui-help-info-header">Details</h3>
+        <p>Identity can be configurated in three ways. Use <code>Cert Type</code> to choose operation from options</p>
+        <p> - <code>Embeded</code> Identity credentials are provided in base64 and stored as credentials in NodeRed. Fields <code>Private Key</code> and <code>Cert</code> must be provided</p>
+        <p> - <code>Filesystem</code> Identity credentials are read from a json file </p>
+        <p> - <code>TxId</code>will recover a block by any of it's transaction id</p>
+        <p><code>Args Array</code> and <code>Transient Data Array</code> must be an array of strings</p>
+    </span>
 </script>
 
 

@@ -6,6 +6,8 @@ export interface FabricIdentityDef extends NodeDef {
     certType: string;
     cert: string;
     privateKey: string;
+    isFabricOpType: string;
+    fabricOpIdPath: string;
     certPath?: string;
     privateKeyPath?: string;
     microfabUrl?: string;
