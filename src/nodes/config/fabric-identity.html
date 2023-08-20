@@ -49,9 +49,9 @@
                 $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
                 $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
 
-                if ($(this).val() === "true") {
+                if ($(this).val() === "false") {
                     $(".form-row-fabricOpIdPath").show(); $("#node-config-input-fabricOpIdPath").prop('required', true);
-                } else if ($(this).val() === "false") {
+                } else if ($(this).val() === "true") {
                     $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
                     $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
                 }
@@ -89,9 +89,9 @@
                     $(".form-row-fabricOpIdPath").hide(); $("#node-config-input-fabricOpIdPath").prop('required', false);
                     $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
                     $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
-                    if ($("#node-config-input-isFabricOpType").val() === "true") {
+                    if ($("#node-config-input-isFabricOpType").val() === "false") {
                         $(".form-row-fabricOpIdPath").show(); $("#node-config-input-fabricOpIdPath").prop('required', true);
-                    } else if ($("#node-config-input-isFabricOpType").val() === "false") {
+                    } else if ($("#node-config-input-isFabricOpType").val() === "true") {
                         $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
                         $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
                     }
@@ -199,12 +199,12 @@
 
     <!-- Path Legacy Key/Cert -->
     <div class="form-row form-row-certPath hide">
-        <label for="node-config-input-certPath"><i class="fa"></i>Cert Path</label>
+        <label for="node-config-input-certPath"><i class="fa"></i>Cert File</label>
         <input type="text" id="node-config-input-certPath" placeholder=""/>
     </div>
 
     <div class="form-row form-row-privateKeyPath hide">
-        <label for="node-config-input-privateKeyPath"><i class="fa"></i>Private Key Path</label>
+        <label for="node-config-input-privateKeyPath"><i class="fa"></i>Private Key File</label>
         <input type="text" id="node-config-input-privateKeyPath" placeholder=""/>
     </div>
 
@@ -228,9 +228,18 @@
         <h3 class="red-ui-help-info-header">Details</h3>
         <p>Identity can be configurated in three ways. Use <code>Cert Type</code> to choose operation from options</p>
         <p> - <code>Embeded</code> Identity credentials are provided in base64 and stored as credentials in NodeRed. Fields <code>Private Key</code> and <code>Cert</code> must be provided</p>
-        <p> - <code>Filesystem</code> Identity credentials are read from a json file </p>
-        <p> - <code>TxId</code>will recover a block by any of it's transaction id</p>
-        <p><code>Args Array</code> and <code>Transient Data Array</code> must be an array of strings</p>
+        <p> - <code>Filesystem</code> Identity credentials are read from a local file in two flavours:</p>
+        <p> - - <code>Legacy Key/Cert Identiy</code> Certificate and Key file path must be provided in PEM format</p>
+        <p> - - <code>Fabric Operations Console Identiy</code> Identiy file path (including both cert and key) must be provided in json and base 64 format. This format is the one provided by the Fabric Operations Console
+            <code>
+            {
+                "name": "admin",
+                "cert": "LS0tL......",
+                "private_key": "LS0tl...."
+            }
+            </code>
+        </p>
+        <p> - <code>Microfab</code> Identity credentias are read from Microfab components rest API. Host where Microfab is running must be provided. The id of chosen identity must be provided</p>
     </span>
 </script>
 

@@ -18,7 +18,7 @@ export = (RED: NodeAPI): void => {
     const fabricChannelDef = getConfigValidate(RED, config.channelSelector);
     const chainInfoDecoder = buildChannelInfoDecoder();
 
-    this.debug('Fabric Get Chain Info Node Created');
+    this.debug('Fabric Get Channel Info Node Created');
     this.status({ fill: 'green', shape: 'dot', text: 'Ready' });
 
     this.on('input', async (msg: NodeMessageInFlow, send, done) => {
