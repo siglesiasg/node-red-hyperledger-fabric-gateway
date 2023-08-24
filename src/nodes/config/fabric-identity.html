@@ -49,11 +49,13 @@
                 $(".form-row-certPath").hide(); $("#node-config-input-certPath").prop('required', false);
                 $(".form-row-privateKeyPath").hide(); $("#node-config-input-privateKeyPath").prop('required', false);
 
-                if ($(this).val() === "false") {
-                    $(".form-row-fabricOpIdPath").show(); $("#node-config-input-fabricOpIdPath").prop('required', true);
-                } else if ($(this).val() === "true") {
-                    $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
-                    $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
+                if ($("#node-config-input-certType").val() === "files") {
+                    if ($(this).val() === "false") {
+                        $(".form-row-fabricOpIdPath").show(); $("#node-config-input-fabricOpIdPath").prop('required', true);
+                    } else if ($(this).val() === "true") {
+                        $(".form-row-certPath").show(); $("#node-config-input-certPath").prop('required', true);
+                        $(".form-row-privateKeyPath").show(); $("#node-config-input-privateKeyPath").prop('required', true);
+                    }
                 }
             }),
 
@@ -230,7 +232,7 @@
         <p> - <code>Embeded</code> Identity credentials are provided in base64 and stored as credentials in NodeRed. Fields <code>Private Key</code> and <code>Cert</code> must be provided</p>
         <p> - <code>Filesystem</code> Identity credentials are read from a local file in two flavours:</p>
         <p> - - <code>Legacy Key/Cert Identiy</code> Certificate and Key file path must be provided in PEM format</p>
-        <p> - - <code>Fabric Operations Console Identiy</code> Identiy file path (including both cert and key) must be provided in json and base 64 format. This format is the one provided by the Fabric Operations Console
+        <p> - - <code>Fabric Operations Console Identiy</code> The identity is loaded from a single JSON file containing the certificate and private key embedded as base64 strings. This matches the format used by Hyperledger Fabric Operations Console.
             <code>
             {
                 "name": "admin",
@@ -239,7 +241,7 @@
             }
             </code>
         </p>
-        <p> - <code>Microfab</code> Identity credentias are read from Microfab components rest API. Host where Microfab is running must be provided. The id of chosen identity must be provided</p>
+        <p> - <code>Microfab</code> The identity is loaded remotely using the Microfab management REST API. This requires configuring the Microfab host and specifying the ID of the identity.</p>
     </span>
 </script>
 
