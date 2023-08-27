@@ -2,7 +2,7 @@
     {
         "id": "6c6e63a00c517697",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Flow Microfab",
         "disabled": false,
         "info": "",
         "env": []
@@ -10,32 +10,23 @@
     {
         "id": "abafb1d456037c1e",
         "type": "fabric-peer",
-        "name": "Peer 1",
+        "name": "Microfab - Peer 1",
         "url": "nodered-testpeer-api.127-0-0-1.nip.io:9999",
+        "tls": "",
         "grpcOptions": "{\n    \"grpc.default_authority\": \"nodered-testpeer-api.127-0-0-1.nip.io:9999\",\n    \"grpc.ssl_target_name_override\": \"nodered-testpeer-api.127-0-0-1.nip.io\"\n}"
-    },
-    {
-        "id": "6d028d5a40c2b6e8",
-        "type": "fabric-mspid",
-        "name": "Node Red Test MSP",
-        "mspId": "noderedtestMSP"
     },
     {
         "id": "351176dfd3b410a7",
         "type": "fabric-gateway",
-        "name": "GW",
-        "mspIdSelectorGw": "6d028d5a40c2b6e8",
+        "name": "Microfab GW",
         "peerSelectorGw": "abafb1d456037c1e"
     },
     {
         "id": "4c5c4259b27b7979",
         "type": "fabric-identity",
-        "name": "nodered-test Admin",
-        "mspIdSelector": "6d028d5a40c2b6e8",
+        "name": "Microfab - nodered-test Admin",
+        "mspIdSelector": "46df964accc9dc05",
         "certType": "microfab",
-        "cert": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUI0RENDQVlXZ0F3SUJBZ0lSQVBoMy9Qa2U3NGZIK0hPZFB3NE5EcXN3Q2dZSUtvWkl6ajBFQXdJd0dqRVkKTUJZR0ExVUVBeE1QYm05a1pYSmxaQzEwWlhOMElFTkJNQjRYRFRJek1EY3dOVEUwTlRjMU1Gb1hEVE16TURjdwpNakUwTlRjMU1Gb3dMVEVPTUF3R0ExVUVDeE1GWVdSdGFXNHhHekFaQmdOVkJBTVRFbTV2WkdWeVpXUXRkR1Z6CmRDQkJaRzFwYmpCWk1CTUdCeXFHU000OUFnRUdDQ3FHU000OUF3RUhBMElBQkxiQ040VnBDOER3dGxiL1N4ZlAKa2RTZkE3NDc3NURXampSNlpsWkQvS0F2aHhodXRXcWp0MmJJWDFHb2hrYVdpYnNwM1ZRWDJiUWRYVVBPVWVLQworSUtqZ1pnd2daVXdEZ1lEVlIwUEFRSC9CQVFEQWdXZ01CMEdBMVVkSlFRV01CUUdDQ3NHQVFVRkJ3TUNCZ2dyCkJnRUZCUWNEQVRBTUJnTlZIUk1CQWY4RUFqQUFNQ2tHQTFVZERnUWlCQ0FzZFhQbU5UU0JMVmxYZFMvMlFDQXgKOXo1V0cxMzBDeWVvV3c5YU5ZcFpwekFyQmdOVkhTTUVKREFpZ0NESTF3WllvZkltUTNqRmRRNWFKUXRnMmd1NwpkZUp6Sk10VXUybitMWFp3U2pBS0JnZ3Foa2pPUFFRREFnTkpBREJHQWlFQWxqejJLczgvSS9ydWNDWmtHZjZCCmtSK0RXc0x3ZStCY09qYUtCN0ZoUTMwQ0lRREdUUXh0a1RYK0MzYXA1MWJCajJ3KzNhNFZ2YVlPb0Mwb0t2dTAKaDBQUmRBPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=",
-        "privateKey": "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR0hBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEJHMHdhd0lCQVFRZ1lKdzhBbVY4ZTBFZEV1VzUKeWQ0UHVNR3VKV25kenYvaGtjOTBGNXl3Vjl5aFJBTkNBQVMyd2plRmFRdkE4TFpXLzBzWHo1SFVud08rTysrUQoxbzQwZW1aV1EveWdMNGNZYnJWcW83ZG15RjlScUlaR2xvbTdLZDFVRjltMEhWMUR6bEhpZ3ZpQwotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg==",
-        "ca": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJvVENDQVVhZ0F3SUJBZ0lSQVBKUTR4K1dtbkpLTXZCLzU4T0lRd2N3Q2dZSUtvWkl6ajBFQXdJd0dqRVkKTUJZR0ExVUVBeE1QYm05a1pYSmxaQzEwWlhOMElFTkJNQjRYRFRJek1EY3dOVEUwTlRjMU1Gb1hEVE16TURjdwpNakUwTlRjMU1Gb3dHakVZTUJZR0ExVUVBeE1QYm05a1pYSmxaQzEwWlhOMElFTkJNRmt3RXdZSEtvWkl6ajBDCkFRWUlLb1pJemowREFRY0RRZ0FFaURheGdQK1BQSVc1a2txM3V5VXlrcWZHWGlWTjJWaUU0aHFWQVBCKzFDYkQKYzFhVy9tUElCaUtaWXZQclZFV3lZVUNyV055TldzOHBMVHdWOGpuaGthTnRNR3N3RGdZRFZSMFBBUUgvQkFRRApBZ0dtTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQ0JnZ3JCZ0VGQlFjREFUQVBCZ05WSFJNQkFmOEVCVEFECkFRSC9NQ2tHQTFVZERnUWlCQ0RJMXdaWW9mSW1RM2pGZFE1YUpRdGcyZ3U3ZGVKekpNdFV1Mm4rTFhad1NqQUsKQmdncWhrak9QUVFEQWdOSkFEQkdBaUVBdWtRaFFjTDdneUVERTZHaERhb0ptS055MDJQRzlxV2RTR0NRb3grTQo2QUVDSVFESmpJd1Q5Tm4zcWFoQ2FEOVJaUk1rZ2lYaXdkMVlMVE9wQ3JFUW9RdThvZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
         "certPath": "./config/identity.pem",
         "privateKeyPath": "./config/identity.key",
         "microfabUrl": "http://client.127-0-0-1.nip.io:9999",
@@ -44,7 +35,7 @@
     {
         "id": "95a7c9887a800091",
         "type": "fabric-channel",
-        "name": "",
+        "name": "Microfab Test",
         "channel": "nodered-test"
     },
     {
@@ -52,6 +43,12 @@
         "type": "fabric-contract",
         "name": "",
         "contract": "fabcar"
+    },
+    {
+        "id": "46df964accc9dc05",
+        "type": "fabric-mspid",
+        "name": "Microfab MSP",
+        "mspId": "noderedtestMSP"
     },
     {
         "id": "6e8b76b1d125d156",
@@ -62,12 +59,13 @@
         "identitySelector": "4c5c4259b27b7979",
         "channelSelector": "95a7c9887a800091",
         "sendTransactions": "false",
-        "checkpointerPath": "./local-env/test-config/checkpointer1.ser",
+        "checkpointerPath": "./local-env/test-config/checkpointer.ser",
         "x": 110,
-        "y": 400,
+        "y": 760,
         "wires": [
             [
                 "b50bff98d7b19767",
+                "cd3714a252f11441",
                 "26d8e3a82dcc4220"
             ]
         ]
@@ -76,28 +74,21 @@
         "id": "1118d44d3aa2895d",
         "type": "inject",
         "z": "6c6e63a00c517697",
-        "name": "Inject Car",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
+        "name": "Inject",
+        "props": [],
         "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"transactionArgs\": []}",
-        "payloadType": "json",
-        "x": 120,
-        "y": 160,
+        "x": 110,
+        "y": 240,
         "wires": [
             [
-                "d487177454017313"
+                "8ce4212f64675485",
+                "28d8d2aeb46df630",
+                "6f24989ca3a34edf",
+                "9d6a20d32dc6a24e"
             ]
         ]
     },
@@ -105,16 +96,16 @@
         "id": "aee187ea32a2f54f",
         "type": "fabric-cc-submit",
         "z": "6c6e63a00c517697",
-        "name": "Submit Car",
+        "name": "Submit Asset",
         "gatewaySelector": "351176dfd3b410a7",
         "identitySelector": "4c5c4259b27b7979",
         "channelSelector": "95a7c9887a800091",
         "contractSelector": "5f1b46cce5ffeabb",
-        "transaction": "CreateCar",
+        "transaction": "CreateAsset",
         "args": "",
-        "transientData": "[\"test\"]",
-        "x": 470,
-        "y": 160,
+        "transientData": "[\"TEST_VALUE\"]",
+        "x": 850,
+        "y": 240,
         "wires": [
             [
                 "4f7463d7aa133df3"
@@ -134,23 +125,24 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
-        "y": 160,
+        "x": 1040,
+        "y": 240,
         "wires": []
     },
     {
         "id": "a800c7f70cdc2c4b",
         "type": "fabric-cc-evaluate",
         "z": "6c6e63a00c517697",
-        "name": "Query All Cars",
+        "name": "Query All Assets",
         "gatewaySelector": "351176dfd3b410a7",
         "identitySelector": "4c5c4259b27b7979",
         "channelSelector": "95a7c9887a800091",
         "contractSelector": "5f1b46cce5ffeabb",
-        "transaction": "QueryAllCars",
+        "transaction": "GetAllAssets",
         "args": "",
-        "x": 480,
-        "y": 260,
+        "transientData": "",
+        "x": 420,
+        "y": 560,
         "wires": [
             [
                 "1aa3acbcccc9f71a"
@@ -164,9 +156,6 @@
         "name": "",
         "props": [
             {
-                "p": "payload"
-            },
-            {
                 "p": "topic",
                 "vt": "str"
             }
@@ -176,10 +165,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 260,
+        "x": 110,
+        "y": 560,
         "wires": [
             [
                 "a800c7f70cdc2c4b"
@@ -190,14 +177,14 @@
         "id": "d487177454017313",
         "type": "change",
         "z": "6c6e63a00c517697",
-        "name": "0001HRH",
+        "name": "asset1 - in payload",
         "rules": [
             {
                 "t": "set",
-                "p": "payload.transaction.args",
+                "p": "payload",
                 "pt": "msg",
-                "to": "[\"0001HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
+                "to": "[$string(rand),\"Red\",\"5\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
             }
         ],
         "action": "",
@@ -205,8 +192,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 280,
-        "y": 120,
+        "x": 450,
+        "y": 180,
         "wires": [
             [
                 "aee187ea32a2f54f"
@@ -217,14 +204,19 @@
         "id": "dff29e2564453d83",
         "type": "change",
         "z": "6c6e63a00c517697",
-        "name": "0002HRH",
+        "name": "asset2 - in payload.transaction",
         "rules": [
             {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
                 "t": "set",
-                "p": "payload.transaction.args",
+                "p": "payload.transaction",
                 "pt": "msg",
-                "to": "[\"0002HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
+                "to": "[$string(rand),\"Red\",\"5\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
             }
         ],
         "action": "",
@@ -232,8 +224,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 280,
-        "y": 140,
+        "x": 490,
+        "y": 220,
         "wires": [
             [
                 "aee187ea32a2f54f"
@@ -251,92 +243,12 @@
         "sendTransactions": "true",
         "checkpointerPath": "./local-env/test-config/checkpointer-tx1.ser",
         "x": 100,
-        "y": 520,
+        "y": 860,
         "wires": [
             [
                 "26d8e3a82dcc4220",
-                "9a819be0e7c1d60a"
-            ]
-        ]
-    },
-    {
-        "id": "20a2c66d54f16e3d",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0003HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transaction.args",
-                "pt": "msg",
-                "to": "[\"0003HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 160,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "0795798652624904",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0004HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transaction.args",
-                "pt": "msg",
-                "to": "[\"0004HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 180,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
-            ]
-        ]
-    },
-    {
-        "id": "648624d2e688a72e",
-        "type": "change",
-        "z": "6c6e63a00c517697",
-        "name": "0005HRH",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.transaction.args",
-                "pt": "msg",
-                "to": "[\"0005HRH\", \"Focus\",\"Ford\",\"Red\",\"Yo\"]",
-                "tot": "json"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 280,
-        "y": 200,
-        "wires": [
-            [
-                "aee187ea32a2f54f"
+                "9a819be0e7c1d60a",
+                "f1f5de34aad44248"
             ]
         ]
     },
@@ -345,8 +257,8 @@
         "type": "fabric-block-listener-commit",
         "z": "6c6e63a00c517697",
         "name": "",
-        "x": 510,
-        "y": 460,
+        "x": 610,
+        "y": 800,
         "wires": []
     },
     {
@@ -372,8 +284,8 @@
         "gatewaySelector": "351176dfd3b410a7",
         "identitySelector": "4c5c4259b27b7979",
         "channelSelector": "95a7c9887a800091",
-        "x": 490,
-        "y": 320,
+        "x": 430,
+        "y": 980,
         "wires": [
             [
                 "7e279e342ca57abf"
@@ -394,7 +306,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 700,
-        "y": 260,
+        "y": 560,
         "wires": []
     },
     {
@@ -405,12 +317,12 @@
         "active": true,
         "tosidebar": true,
         "console": false,
-        "tostatus": false,
+        "tostatus": true,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "",
+        "statusVal": "payload",
         "statusType": "auto",
-        "x": 710,
+        "x": 750,
         "y": 60,
         "wires": []
     },
@@ -421,9 +333,6 @@
         "name": "",
         "props": [
             {
-                "p": "payload"
-            },
-            {
                 "p": "topic",
                 "vt": "str"
             }
@@ -433,10 +342,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 320,
+        "x": 110,
+        "y": 980,
         "wires": [
             [
                 "4f8cd8ba32a6e2b8"
@@ -454,10 +361,10 @@
         "tostatus": true,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "payload.result.chainInfo.height",
+        "statusVal": "payload.result.height",
         "statusType": "msg",
         "x": 700,
-        "y": 320,
+        "y": 980,
         "wires": []
     },
     {
@@ -473,8 +380,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
-        "y": 400,
+        "x": 360,
+        "y": 700,
         "wires": []
     },
     {
@@ -482,7 +389,7 @@
         "type": "debug",
         "z": "6c6e63a00c517697",
         "name": "debug 5",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -490,86 +397,24 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
-        "y": 520,
+        "x": 360,
+        "y": 920,
         "wires": []
-    },
-    {
-        "id": "ef570186216b3207",
-        "type": "fabric-metadata",
-        "z": "6c6e63a00c517697",
-        "name": "Chaincode Metadata",
-        "gatewaySelector": "351176dfd3b410a7",
-        "identitySelector": "4c5c4259b27b7979",
-        "channelSelector": "95a7c9887a800091",
-        "x": 500,
-        "y": 580,
-        "wires": [
-            [
-                "2c4853aacdbdef13"
-            ]
-        ]
-    },
-    {
-        "id": "2c4853aacdbdef13",
-        "type": "debug",
-        "z": "6c6e63a00c517697",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 700,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "5f5a059249271359",
-        "type": "inject",
-        "z": "6c6e63a00c517697",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 580,
-        "wires": [
-            [
-                "ef570186216b3207"
-            ]
-        ]
     },
     {
         "id": "2ec94290e2c7ec7c",
         "type": "fabric-block-info",
         "z": "6c6e63a00c517697",
         "name": "Get Block By Number",
-        "method": "number",
         "gatewaySelector": "351176dfd3b410a7",
         "identitySelector": "4c5c4259b27b7979",
         "channelSelector": "95a7c9887a800091",
-        "blockNumber": "3",
+        "method": "number",
+        "blockNumber": "2",
         "blockHash": "",
         "txId": "",
-        "x": 500,
-        "y": 660,
+        "x": 440,
+        "y": 1040,
         "wires": [
             [
                 "863543ac8b5745df"
@@ -583,9 +428,6 @@
         "name": "",
         "props": [
             {
-                "p": "payload"
-            },
-            {
                 "p": "topic",
                 "vt": "str"
             }
@@ -595,10 +437,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 660,
+        "x": 110,
+        "y": 1040,
         "wires": [
             [
                 "2ec94290e2c7ec7c"
@@ -619,7 +459,429 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 700,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "9392986e6570ee55",
+        "type": "change",
+        "z": "6c6e63a00c517697",
+        "name": "asset3 - in payload.transaction.args",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.transaction.args",
+                "pt": "msg",
+                "to": "[$string(rand),\"Red\",\"25\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 260,
+        "wires": [
+            [
+                "aee187ea32a2f54f"
+            ]
+        ]
+    },
+    {
+        "id": "62d4510a3997bb57",
+        "type": "change",
+        "z": "6c6e63a00c517697",
+        "name": "asset4 - with transient data",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.transaction.args",
+                "pt": "msg",
+                "to": "[$string(rand),\"Red\",\"15\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload.transaction.transient",
+                "pt": "msg",
+                "to": "[\"transient\"]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 300,
+        "wires": [
+            [
+                "aee187ea32a2f54f"
+            ]
+        ]
+    },
+    {
+        "id": "8ce4212f64675485",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 180,
+        "wires": [
+            [
+                "d487177454017313"
+            ]
+        ]
+    },
+    {
+        "id": "28d8d2aeb46df630",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 220,
+        "wires": [
+            [
+                "dff29e2564453d83"
+            ]
+        ]
+    },
+    {
+        "id": "6f24989ca3a34edf",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 260,
+        "wires": [
+            [
+                "9392986e6570ee55"
+            ]
+        ]
+    },
+    {
+        "id": "9d6a20d32dc6a24e",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 300,
+        "wires": [
+            [
+                "62d4510a3997bb57"
+            ]
+        ]
+    },
+    {
+        "id": "78e08fd769f1ef77",
+        "type": "comment",
+        "z": "6c6e63a00c517697",
+        "name": "Blockchain Events & Data",
+        "info": "",
+        "x": 150,
         "y": 660,
         "wires": []
+    },
+    {
+        "id": "89fb4afa817f4099",
+        "type": "comment",
+        "z": "6c6e63a00c517697",
+        "name": "Chaincode",
+        "info": "",
+        "x": 100,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "c44b76442fe8b4a1",
+        "type": "inject",
+        "z": "6c6e63a00c517697",
+        "name": "Inject",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 420,
+        "wires": [
+            [
+                "d0a55683c292e7dd",
+                "9f8e6780c98ca2bb",
+                "eed9e3483738b425"
+            ]
+        ]
+    },
+    {
+        "id": "922bd1f77f7902c3",
+        "type": "fabric-cc-submit",
+        "z": "6c6e63a00c517697",
+        "name": "Submit Asset Optional Tx",
+        "gatewaySelector": "351176dfd3b410a7",
+        "identitySelector": "4c5c4259b27b7979",
+        "channelSelector": "95a7c9887a800091",
+        "contractSelector": "5f1b46cce5ffeabb",
+        "transaction": "",
+        "args": "",
+        "transientData": "[\"TEST_VALUE\"]",
+        "x": 850,
+        "y": 420,
+        "wires": [
+            [
+                "1bbd5261cac4c478"
+            ]
+        ]
+    },
+    {
+        "id": "1bbd5261cac4c478",
+        "type": "debug",
+        "z": "6c6e63a00c517697",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "4501781afd237b74",
+        "type": "change",
+        "z": "6c6e63a00c517697",
+        "name": "asset2 - tx name in payload.transactionName",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.transactionName",
+                "pt": "msg",
+                "to": "CreateAsset",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.transaction",
+                "pt": "msg",
+                "to": "[$string(rand),\"Red\",\"5\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 400,
+        "wires": [
+            [
+                "922bd1f77f7902c3"
+            ]
+        ]
+    },
+    {
+        "id": "878b9d71f1e6b6ac",
+        "type": "change",
+        "z": "6c6e63a00c517697",
+        "name": "asset3 - tx name in payload.transaction.name",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.transaction.name",
+                "pt": "msg",
+                "to": "CreateAsset",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.transaction.args",
+                "pt": "msg",
+                "to": "[$string(rand),\"Red\",\"25\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 440,
+        "wires": [
+            [
+                "922bd1f77f7902c3"
+            ]
+        ]
+    },
+    {
+        "id": "154881b6bffb2b66",
+        "type": "change",
+        "z": "6c6e63a00c517697",
+        "name": "asset4 - tx name with transient data",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.transaction.name",
+                "pt": "msg",
+                "to": "CreateAsset",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.transaction.args",
+                "pt": "msg",
+                "to": "[$string(rand),\"Red\",\"15\",\"Yo\",\"50\"]",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload.transaction.transient",
+                "pt": "msg",
+                "to": "[\"transient\"]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 480,
+        "wires": [
+            [
+                "922bd1f77f7902c3"
+            ]
+        ]
+    },
+    {
+        "id": "d0a55683c292e7dd",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 400,
+        "wires": [
+            [
+                "4501781afd237b74"
+            ]
+        ]
+    },
+    {
+        "id": "9f8e6780c98ca2bb",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 440,
+        "wires": [
+            [
+                "878b9d71f1e6b6ac"
+            ]
+        ]
+    },
+    {
+        "id": "eed9e3483738b425",
+        "type": "random",
+        "z": "6c6e63a00c517697",
+        "name": "",
+        "low": "0",
+        "high": "999999999",
+        "inte": "true",
+        "property": "rand",
+        "x": 260,
+        "y": 480,
+        "wires": [
+            [
+                "154881b6bffb2b66"
+            ]
+        ]
+    },
+    {
+        "id": "f1f5de34aad44248",
+        "type": "delay",
+        "z": "6c6e63a00c517697",
+        "name": "test duplicated",
+        "pauseType": "delay",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 380,
+        "y": 860,
+        "wires": [
+            [
+                "26d8e3a82dcc4220"
+            ]
+        ]
+    },
+    {
+        "id": "cd3714a252f11441",
+        "type": "delay",
+        "z": "6c6e63a00c517697",
+        "name": "test duplicated",
+        "pauseType": "delay",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 380,
+        "y": 740,
+        "wires": [
+            [
+                "26d8e3a82dcc4220"
+            ]
+        ]
     }
 ]

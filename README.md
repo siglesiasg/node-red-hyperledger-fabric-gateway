@@ -2,9 +2,9 @@
 
 A Hyperledger Fabric Gateway for Node Red 3.x implementation nodes to work with recent HLF networks v2.4 (or later)
 
-<!-- [![Donate][donation-badge]](https://www.buymeacoffee.com/siglesiasg)
+[![Donate][donation-badge]](https://www.buymeacoffee.com/siglesiasg)
 
-[donation-badge]: https://img.shields.io/badge/Buy%20me%20a%20pizza-%23d32f2f?logo=buy-me-a-coffee&style=flat&logoColor=white -->
+[donation-badge]: https://img.shields.io/badge/Buy%20me%20a%20pizza-%23d32f2f?logo=buy-me-a-coffee&style=flat&logoColor=white
 
 ## Overview
 
@@ -106,27 +106,47 @@ Node to configure the channel name
 
 [connection-channel]: ./readme-assets/connection-channel.png
 
-## Transaction Nodes
+Once the connection nodes are configured properly, you can operate with HLF using `Hyperledger Gateway` nodes.
 
-Once the connection nodes are configured properly, you can operate with HLF using `Chaincode Nodes`.
+## Transaction Nodes
 
 ![Transaction Nodes][transaction-nodes]
 
 [transaction-nodes]: ./readme-assets/transaction-nodes.png
 
-### Chaincode Evaluate
-### Chaincode Submit
-### Chaincode Call
+These nodes work in the same way as HLF's own operations. Configuration can be added to the node or passed as parameters in `payload` object. 
 
 ## Event Nodes
 
+![Event Nodes][event-nodes]
+
+[event-nodes]: ./readme-assets/event-nodes.png
+
+`Block listener` node reads all block events and publishes a message for each block and transaction processed. To prevent saturation of the JavaScript event loop, each message must be acknowledged. If the node restarts, it will resume reading from the last checkpoint.
+
+![Block Listener Nodes][transaction-events]
+
+[transaction-events]: ./readme-assets/transaction-events.png
+
+`Block listener commit` node will mark the message as done so next message event will be published.
+
 ## Channel Nodes
 
-## Example
+![Channel Nodes][channel-nodes]
 
-## TODO
+[channel-nodes]: ./readme-assets/channel-nodes.png
 
- - Make gateway 
+Provide information about the selected channel.
+
+  - `Channel Info` query the ledger and return the channel info: Last block and it's hash
+
+  - `Get Block`query the ledger and return the block based on:
+
+    - By `Number` will recover a block by it's number. Must be a number
+
+    - By `Hash` will recover a block by it's hash
+
+    - By `TxId` will recover a block by any of it's transaction id
 
 ## Donate
 Do you like my work? Buy me a coffee - or pizza 😜🍕
