@@ -19,8 +19,7 @@
         "blockchain",
         "hyperledger",
         "gateway",
-        "fabric-gateway",
-        "solutions"
+        "fabric-gateway"
     ],
     "license": "Apache-2.0",    
     "scripts": {
