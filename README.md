@@ -124,11 +124,11 @@ These nodes work in the same way as HLF's own operations. Configuration can be a
 
 `Block listener` node reads all block events and publishes a message for each block and transaction processed. To prevent saturation of the JavaScript event loop, each message must be acknowledged. If the node restarts, it will resume reading from the last checkpoint.
 
-![Block Listener Nodes][transaction-events]
+![Block Listener Nodes][event-config]
 
-[transaction-events]: ./readme-assets/transaction-events.png
+[event-config]: ./readme-assets/event-config.png
 
-`Block listener commit` node will mark the message as done so next message event will be published.
+`Block listener commit` node will mark the message as done so next message event will be published. No Configuration needed
 
 ## Channel Nodes
 
