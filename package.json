@@ -1,6 +1,6 @@
 {
     "name": "@siglesiasg/node-red-hyperledger-fabric-gateway",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Hyperledger Fabric 2.x nodes for node-red with latest fabric-gateway library",
     "author": {
         "name": "Secundino Iglesias",
